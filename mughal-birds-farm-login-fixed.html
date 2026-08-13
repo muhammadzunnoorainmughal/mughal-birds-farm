@@ -1,0 +1,1997 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>Mughal Birds Farm</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<style>
+/* ============================================================
+   MUGHAL BIRDS FARM — DESIGN TOKENS
+   Palette: aviary dusk. Deep pine (#1B3A2B) + warm brass (#C89B3C)
+   on soft feather cream (#F6F2E8), with dove-slate (#4A6670) and
+   a clay-red status accent (#B5473A). Display face Fraunces
+   (warm, slightly humanist serif — feels like ledger/registry
+   typography), body Inter, data/IDs in JetBrains Mono.
+   Signature: a hand-drawn "wing ledger" divider + soft aviary
+   grid texture used sparingly behind empty states.
+   ============================================================ */
+:root{
+  --pine-950:#0F251B;
+  --pine-900:#16332580;
+  --pine:#1B3A2B;
+  --pine-700:#254A38;
+  --pine-100:#DCE9E0;
+  --brass:#C89B3C;
+  --brass-600:#A87F2A;
+  --brass-100:#F4E7C8;
+  --cream:#F6F2E8;
+  --cream-100:#FFFDF8;
+  --slate:#4A6670;
+  --slate-100:#E3EAEC;
+  --clay:#B5473A;
+  --clay-100:#F6DEDA;
+  --ok:#2E7D53;
+  --ok-100:#DBEFE2;
+  --ink:#1D2420;
+  --ink-soft:#5B655F;
+  --line:#E4DDC9;
+  --radius:16px;
+  --radius-sm:10px;
+  --shadow-sm:0 1px 2px rgba(27,58,43,.06);
+  --shadow-md:0 8px 24px -8px rgba(27,58,43,.18);
+  --shadow-lg:0 20px 48px -12px rgba(27,58,43,.28);
+  --font-display:'Fraunces',serif;
+  --font-body:'Inter',system-ui,sans-serif;
+  --font-mono:'JetBrains Mono',monospace;
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+html,body{margin:0;padding:0;}
+body{
+  font-family:var(--font-body);
+  background:var(--cream);
+  color:var(--ink);
+  min-height:100vh;
+  -webkit-font-smoothing:antialiased;
+}
+@media (prefers-reduced-motion: reduce){
+  *{animation-duration:0.01ms !important;transition-duration:0.01ms !important;}
+}
+img{max-width:100%;display:block;}
+button{font-family:inherit;cursor:pointer;}
+input,select,textarea{font-family:inherit;}
+a{color:inherit;}
+::selection{background:var(--brass-100);}
+:focus-visible{outline:2.5px solid var(--brass-600);outline-offset:2px;}
+
+.hidden{display:none !important;}
+
+/* ---------- feather texture ---------- */
+.feather-bg{
+  background-image:
+    radial-gradient(circle at 20% 20%, rgba(27,58,43,.035) 0, transparent 40%),
+    radial-gradient(circle at 80% 60%, rgba(200,155,60,.05) 0, transparent 45%);
+}
+
+/* ---------- AUTH SCREEN ---------- */
+#authScreen{
+  min-height:100vh;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:24px;
+  background:
+    linear-gradient(180deg, var(--pine-950) 0%, var(--pine) 62%, var(--pine-700) 100%);
+  position:relative;
+  overflow:hidden;
+}
+#authScreen::before{
+  content:"";
+  position:absolute;inset:0;
+  background-image:
+    repeating-linear-gradient(115deg, rgba(255,255,255,.025) 0 1px, transparent 1px 64px),
+    repeating-linear-gradient(25deg, rgba(255,255,255,.02) 0 1px, transparent 1px 64px);
+  pointer-events:none;
+}
+.auth-card{
+  position:relative;
+  width:100%;max-width:408px;
+  background:var(--cream-100);
+  border-radius:22px;
+  box-shadow:var(--shadow-lg);
+  padding:36px 30px 28px;
+}
+.auth-brand{text-align:center;margin-bottom:22px;}
+.auth-brand .mark{
+  width:56px;height:56px;border-radius:16px;
+  background:linear-gradient(155deg,var(--brass) 0%, var(--brass-600) 100%);
+  display:flex;align-items:center;justify-content:center;
+  margin:0 auto 14px;color:var(--pine-950);font-size:24px;
+  box-shadow:0 8px 20px -6px rgba(200,155,60,.55);
+}
+.auth-brand h1{
+  font-family:var(--font-display);font-weight:600;font-size:24px;margin:0;color:var(--pine);letter-spacing:.2px;
+}
+.auth-brand p{margin:4px 0 0;color:var(--ink-soft);font-size:13px;letter-spacing:.4px;text-transform:uppercase;}
+.auth-tabs{display:flex;background:var(--slate-100);border-radius:12px;padding:4px;margin-bottom:22px;}
+.auth-tabs button{
+  flex:1;border:0;background:transparent;padding:10px 0;border-radius:9px;font-weight:600;font-size:14px;color:var(--ink-soft);transition:all .2s;
+}
+.auth-tabs button.active{background:var(--cream-100);color:var(--pine);box-shadow:var(--shadow-sm);}
+.field{margin-bottom:16px;}
+.field label{display:block;font-size:12.5px;font-weight:600;color:var(--ink-soft);margin-bottom:6px;letter-spacing:.2px;}
+.field input,.field select,.field textarea{
+  width:100%;padding:12px 14px;border:1.5px solid var(--line);border-radius:11px;
+  background:var(--cream-100);font-size:15px;color:var(--ink);transition:border-color .15s, box-shadow .15s;
+}
+.field input:focus,.field select:focus,.field textarea:focus{border-color:var(--brass-600);box-shadow:0 0 0 4px rgba(200,155,60,.15);}
+.field textarea{resize:vertical;min-height:70px;}
+.btn{
+  border:none;border-radius:11px;padding:13px 18px;font-weight:700;font-size:14.5px;
+  display:inline-flex;align-items:center;justify-content:center;gap:8px;transition:transform .12s, box-shadow .12s, background .15s;
+  white-space:nowrap;
+}
+.btn:active{transform:scale(.97);}
+.btn-primary{background:var(--pine);color:var(--cream-100);width:100%;box-shadow:0 8px 20px -8px rgba(27,58,43,.5);}
+.btn-primary:hover{background:var(--pine-700);}
+.btn-gold{background:linear-gradient(155deg,var(--brass) 0%,var(--brass-600) 100%);color:var(--pine-950);}
+.btn-gold:hover{filter:brightness(1.05);}
+.btn-ghost{background:transparent;color:var(--pine);border:1.5px solid var(--line);}
+.btn-ghost:hover{border-color:var(--pine);}
+.btn-danger{background:var(--clay);color:#fff;}
+.btn-sm{padding:8px 12px;font-size:13px;border-radius:9px;}
+.btn-block{width:100%;}
+.auth-link{display:block;text-align:center;margin-top:16px;font-size:13.5px;color:var(--slate);font-weight:600;background:none;border:none;}
+.auth-error{
+  background:var(--clay-100);color:var(--clay);border-radius:10px;padding:10px 13px;font-size:13px;margin-bottom:14px;font-weight:600;display:flex;gap:8px;align-items:flex-start;
+}
+.auth-note{background:var(--brass-100);color:#7A5A18;border-radius:10px;padding:10px 13px;font-size:12.5px;margin-top:14px;line-height:1.5;}
+
+/* ---------- APP SHELL ---------- */
+#app{display:none;min-height:100vh;}
+#app.active{display:flex;}
+.sidebar{
+  width:248px;flex-shrink:0;background:var(--pine);color:var(--cream);
+  display:flex;flex-direction:column;position:sticky;top:0;height:100vh;overflow-y:auto;z-index:60;
+}
+.sidebar-brand{padding:22px 20px 16px;display:flex;align-items:center;gap:12px;border-bottom:1px solid rgba(255,255,255,.09);}
+.sidebar-brand .mark{width:38px;height:38px;border-radius:11px;background:linear-gradient(155deg,var(--brass),var(--brass-600));display:flex;align-items:center;justify-content:center;color:var(--pine-950);font-size:17px;flex-shrink:0;}
+.sidebar-brand h1{font-family:var(--font-display);font-size:16.5px;margin:0;font-weight:600;line-height:1.2;}
+.sidebar-brand span{font-size:10.5px;color:var(--brass-100);opacity:.8;letter-spacing:.5px;text-transform:uppercase;}
+.sync-pill{margin:14px 16px 4px;display:flex;align-items:center;gap:8px;font-size:12px;font-weight:600;padding:8px 12px;border-radius:10px;background:rgba(255,255,255,.06);}
+.sync-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;}
+.sync-dot.on{background:#3FCE7E;box-shadow:0 0 0 3px rgba(63,206,126,.25);}
+.sync-dot.off{background:#E8A23A;box-shadow:0 0 0 3px rgba(232,162,58,.25);}
+.sync-dot.err{background:#E85C4A;box-shadow:0 0 0 3px rgba(232,92,74,.25);}
+.nav{flex:1;padding:10px 12px;overflow-y:auto;}
+.nav-group-label{font-size:10.5px;text-transform:uppercase;letter-spacing:.8px;color:rgba(246,242,232,.45);margin:16px 12px 6px;font-weight:700;}
+.nav-item{
+  display:flex;align-items:center;gap:11px;padding:10px 12px;border-radius:10px;font-size:14px;font-weight:600;color:rgba(246,242,232,.82);
+  cursor:pointer;transition:background .15s,color .15s;margin-bottom:2px;
+}
+.nav-item i{width:18px;text-align:center;font-size:15px;}
+.nav-item:hover{background:rgba(255,255,255,.07);color:#fff;}
+.nav-item.active{background:var(--brass);color:var(--pine-950);}
+.sidebar-foot{padding:14px 16px 18px;border-top:1px solid rgba(255,255,255,.09);}
+.user-chip{display:flex;align-items:center;gap:10px;margin-bottom:10px;}
+.user-chip .av{width:34px;height:34px;border-radius:50%;background:var(--brass-100);color:var(--pine);display:flex;align-items:center;justify-content:center;font-weight:800;font-size:13px;flex-shrink:0;}
+.user-chip .em{font-size:12px;color:rgba(246,242,232,.7);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:160px;}
+.logout-btn{width:100%;background:rgba(255,255,255,.08);color:var(--cream);border:none;border-radius:9px;padding:9px;font-size:13px;font-weight:600;display:flex;align-items:center;justify-content:center;gap:7px;}
+.logout-btn:hover{background:rgba(255,255,255,.15);}
+
+.main{flex:1;min-width:0;display:flex;flex-direction:column;}
+.topbar{
+  position:sticky;top:0;z-index:30;background:rgba(246,242,232,.92);backdrop-filter:blur(10px);
+  border-bottom:1px solid var(--line);padding:14px 24px;display:flex;align-items:center;gap:14px;
+}
+.hamburger{display:none;background:none;border:none;font-size:20px;color:var(--pine);padding:4px;cursor:pointer;}
+.sidebar-close{display:none;margin-left:auto;background:rgba(255,255,255,.09);border:0;color:var(--cream);width:34px;height:34px;border-radius:9px;align-items:center;justify-content:center;font-size:16px;cursor:pointer;flex-shrink:0;}
+.sidebar-close:hover{background:rgba(255,255,255,.16);}
+.topbar h2{font-family:var(--font-display);font-size:20px;margin:0;font-weight:600;color:var(--pine);flex:1;}
+.topbar-search{position:relative;width:260px;max-width:40vw;}
+.topbar-search input{width:100%;padding:9px 12px 9px 34px;border-radius:10px;border:1.5px solid var(--line);background:var(--cream-100);font-size:13.5px;}
+.topbar-search i{position:absolute;left:12px;top:50%;transform:translateY(-50%);color:var(--ink-soft);font-size:13px;}
+.content{padding:22px 24px 60px;max-width:1280px;width:100%;margin:0 auto;}
+
+.overlay{position:fixed;inset:0;background:rgba(15,37,27,.5);z-index:50;display:none;}
+.overlay.show{display:block;}
+
+/* ---------- Cards / stats ---------- */
+.stat-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(168px,1fr));gap:14px;margin-bottom:26px;}
+.stat-card{background:var(--cream-100);border:1px solid var(--line);border-radius:var(--radius);padding:16px 18px;box-shadow:var(--shadow-sm);transition:transform .15s,box-shadow .15s;cursor:pointer;}
+.stat-card:hover{transform:translateY(-2px);box-shadow:var(--shadow-md);}
+.stat-card .ic{width:34px;height:34px;border-radius:9px;display:flex;align-items:center;justify-content:center;margin-bottom:10px;font-size:15px;}
+.stat-card .val{font-family:var(--font-display);font-size:26px;font-weight:600;color:var(--pine);line-height:1;}
+.stat-card .lbl{font-size:12px;color:var(--ink-soft);margin-top:5px;font-weight:600;}
+
+.section-head{display:flex;align-items:center;justify-content:space-between;gap:12px;margin:28px 0 14px;flex-wrap:wrap;}
+.section-head h3{font-family:var(--font-display);font-size:18px;margin:0;color:var(--pine);font-weight:600;}
+.wing-divider{border:none;border-top:1px dashed var(--line);margin:26px 0;}
+
+.card-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:14px;}
+.entity-card{background:var(--cream-100);border:1px solid var(--line);border-radius:var(--radius);padding:16px;box-shadow:var(--shadow-sm);cursor:pointer;transition:transform .15s,box-shadow .15s;position:relative;}
+.entity-card:hover{transform:translateY(-2px);box-shadow:var(--shadow-md);}
+.entity-card .top{display:flex;justify-content:space-between;align-items:flex-start;gap:8px;}
+.entity-card h4{margin:0 0 3px;font-size:15.5px;font-weight:700;color:var(--pine);}
+.entity-card .mono{font-family:var(--font-mono);font-size:11px;color:var(--ink-soft);}
+.entity-card .meta{margin-top:10px;display:flex;flex-wrap:wrap;gap:6px;}
+
+.badge{display:inline-flex;align-items:center;gap:4px;font-size:11px;font-weight:700;padding:3px 9px;border-radius:20px;letter-spacing:.2px;}
+.badge-green{background:var(--ok-100);color:var(--ok);}
+.badge-red{background:var(--clay-100);color:var(--clay);}
+.badge-gold{background:var(--brass-100);color:#8A6414;}
+.badge-slate{background:var(--slate-100);color:var(--slate);}
+.badge-pine{background:var(--pine-100);color:var(--pine);}
+
+/* ---------- Table (desktop) / card list (mobile) ---------- */
+.table-wrap{background:var(--cream-100);border:1px solid var(--line);border-radius:var(--radius);overflow:hidden;box-shadow:var(--shadow-sm);}
+table.dtable{width:100%;border-collapse:collapse;}
+.dtable th{text-align:left;font-size:11px;text-transform:uppercase;letter-spacing:.5px;color:var(--ink-soft);padding:12px 16px;background:var(--pine-100);font-weight:700;}
+.dtable td{padding:12px 16px;font-size:13.5px;border-top:1px solid var(--line);vertical-align:middle;}
+.dtable tr{cursor:pointer;}
+.dtable tr:hover td{background:rgba(200,155,60,.06);}
+.row-actions{display:flex;gap:6px;}
+.icon-btn{width:30px;height:30px;border-radius:8px;border:1px solid var(--line);background:var(--cream-100);display:flex;align-items:center;justify-content:center;font-size:12.5px;color:var(--slate);}
+.icon-btn:hover{background:var(--slate-100);}
+.icon-btn.danger:hover{background:var(--clay-100);color:var(--clay);border-color:var(--clay-100);}
+
+@media (max-width:760px){
+  .dtable thead{display:none;}
+  .dtable, .dtable tbody, .dtable tr, .dtable td{display:block;width:100%;}
+  .dtable tr{border-top:1px solid var(--line);padding:12px 14px;}
+  .dtable td{border:none;padding:3px 0;font-size:13.5px;}
+  .dtable td::before{content:attr(data-label);display:inline-block;min-width:96px;font-size:10.5px;text-transform:uppercase;color:var(--ink-soft);font-weight:700;letter-spacing:.4px;}
+}
+
+/* ---------- Empty state ---------- */
+.empty-state{
+  text-align:center;padding:52px 24px;background:var(--cream-100);border:1px dashed var(--line);border-radius:var(--radius);
+}
+.empty-state .emoji{font-size:38px;margin-bottom:10px;}
+.empty-state h4{font-family:var(--font-display);font-size:18px;color:var(--pine);margin:0 0 6px;}
+.empty-state p{color:var(--ink-soft);font-size:13.5px;margin:0 0 18px;max-width:360px;margin-left:auto;margin-right:auto;line-height:1.5;}
+
+/* ---------- Quick actions ---------- */
+.qa-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:10px;}
+.qa-btn{background:var(--cream-100);border:1px solid var(--line);border-radius:13px;padding:14px 10px;text-align:center;box-shadow:var(--shadow-sm);transition:transform .15s;}
+.qa-btn:hover{transform:translateY(-2px);border-color:var(--brass);}
+.qa-btn i{font-size:18px;color:var(--brass-600);margin-bottom:6px;display:block;}
+.qa-btn span{font-size:12px;font-weight:700;color:var(--pine);}
+
+/* ---------- Modal ---------- */
+.modal-backdrop{position:fixed;inset:0;background:rgba(15,37,27,.55);z-index:100;display:none;align-items:flex-start;justify-content:center;padding:5vh 16px;overflow-y:auto;}
+.modal-backdrop.show{display:flex;}
+.modal{background:var(--cream-100);border-radius:20px;max-width:560px;width:100%;box-shadow:var(--shadow-lg);margin-bottom:5vh;}
+.modal-head{display:flex;align-items:center;justify-content:space-between;padding:20px 22px;border-bottom:1px solid var(--line);}
+.modal-head h3{font-family:var(--font-display);font-size:18px;margin:0;color:var(--pine);}
+.modal-close{background:var(--slate-100);border:none;width:30px;height:30px;border-radius:9px;color:var(--slate);font-size:13px;}
+.modal-body{padding:20px 22px;max-height:64vh;overflow-y:auto;}
+.modal-foot{display:flex;gap:10px;justify-content:flex-end;padding:16px 22px;border-top:1px solid var(--line);}
+.two-col{display:grid;grid-template-columns:1fr 1fr;gap:0 14px;}
+@media (max-width:520px){.two-col{grid-template-columns:1fr;}}
+.field-error{color:var(--clay);font-size:11.5px;margin-top:4px;font-weight:600;}
+
+/* ---------- Toasts ---------- */
+#toastWrap{position:fixed;bottom:20px;right:20px;z-index:200;display:flex;flex-direction:column;gap:10px;max-width:320px;}
+.toast{background:var(--pine);color:var(--cream-100);padding:12px 16px;border-radius:12px;font-size:13.5px;font-weight:600;box-shadow:var(--shadow-lg);display:flex;align-items:center;gap:10px;animation:toastIn .25s ease;}
+.toast.error{background:var(--clay);}
+.toast.success{background:var(--ok);}
+@keyframes toastIn{from{opacity:0;transform:translateY(8px);}to{opacity:1;transform:translateY(0);}}
+
+/* ---------- Detail/profile ---------- */
+.profile-head{display:flex;gap:16px;align-items:center;background:var(--cream-100);border:1px solid var(--line);border-radius:var(--radius);padding:20px;margin-bottom:18px;flex-wrap:wrap;}
+.profile-photo{width:76px;height:76px;border-radius:16px;background:var(--pine-100);display:flex;align-items:center;justify-content:center;font-size:28px;color:var(--pine);flex-shrink:0;overflow:hidden;}
+.profile-photo img{width:100%;height:100%;object-fit:cover;}
+.info-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:14px;margin-bottom:18px;}
+.info-item{background:var(--cream-100);border:1px solid var(--line);border-radius:12px;padding:12px 14px;}
+.info-item .k{font-size:10.5px;text-transform:uppercase;color:var(--ink-soft);font-weight:700;letter-spacing:.4px;margin-bottom:3px;}
+.info-item .v{font-size:14px;font-weight:700;color:var(--pine);}
+
+.pill-tabs{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:16px;}
+.pill-tabs button{border:1.5px solid var(--line);background:var(--cream-100);padding:7px 14px;border-radius:20px;font-size:12.5px;font-weight:700;color:var(--slate);}
+.pill-tabs button.active{background:var(--pine);border-color:var(--pine);color:var(--cream-100);}
+
+.filter-bar{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:16px;align-items:center;}
+.filter-bar select,.filter-bar input{padding:9px 12px;border-radius:9px;border:1.5px solid var(--line);background:var(--cream-100);font-size:13px;}
+.back-link{display:inline-flex;align-items:center;gap:6px;color:var(--slate);font-weight:700;font-size:13px;margin-bottom:14px;background:none;border:none;}
+.back-link:hover{color:var(--pine);}
+
+.welcome-hero{text-align:center;padding:60px 20px;background:linear-gradient(180deg,rgba(200,155,60,.08),transparent);border-radius:var(--radius);margin-bottom:20px;}
+.welcome-hero .mark{width:64px;height:64px;border-radius:18px;background:linear-gradient(155deg,var(--brass),var(--brass-600));display:flex;align-items:center;justify-content:center;font-size:26px;color:var(--pine-950);margin:0 auto 16px;}
+.welcome-hero h2{font-family:var(--font-display);font-size:26px;color:var(--pine);margin:0 0 8px;}
+.welcome-hero p{color:var(--ink-soft);font-size:14.5px;max-width:420px;margin:0 auto 22px;line-height:1.6;}
+
+.spinner{width:16px;height:16px;border-radius:50%;border:2.5px solid rgba(255,255,255,.35);border-top-color:#fff;animation:spin .7s linear infinite;}
+@keyframes spin{to{transform:rotate(360deg);}}
+
+.helper-text{font-size:11.5px;color:var(--ink-soft);margin-top:4px;line-height:1.4;}
+
+@media (max-width:900px){
+  .sidebar{position:fixed;left:0;top:0;bottom:0;transform:translateX(-100%);transition:transform .25s ease;box-shadow:var(--shadow-lg);z-index:60;}
+  .sidebar.open{transform:translateX(0);}
+  .hamburger{display:inline-flex;}
+  .sidebar-close{display:flex;}
+  .topbar-search{width:150px;}
+  .content{padding:16px 14px 60px;}
+}
+</style>
+</head>
+<body>
+
+<!-- ============================================================
+     AUTH SCREEN
+============================================================ -->
+<div id="authScreen">
+  <div class="auth-card">
+    <div class="auth-brand">
+      <div class="mark"><i class="fa-solid fa-dove"></i></div>
+      <h1>Mughal Birds Farm</h1>
+      <p>Bird &amp; Animal Management</p>
+    </div>
+
+    <div id="authError" class="auth-error hidden"><i class="fa-solid fa-triangle-exclamation" style="margin-top:2px;"></i><span id="authErrorText"></span></div>
+    <div id="authInfo" class="auth-note hidden"></div>
+
+    <!-- Login -->
+    <div id="loginPane">
+      <div class="auth-tabs">
+        <button class="active" data-authtab="login">Log In</button>
+        <button data-authtab="register">Register</button>
+      </div>
+      <form id="loginForm">
+        <div class="field"><label>Email</label><input type="email" id="loginEmail" required autocomplete="username"></div>
+        <div class="field"><label>Password</label><input type="password" id="loginPassword" required autocomplete="current-password"></div>
+        <button type="submit" class="btn btn-primary btn-block" id="loginBtn"><span>Log In</span></button>
+        <button type="button" class="auth-link" id="showForgot">Forgot password?</button>
+      </form>
+    </div>
+
+    <!-- Register -->
+    <div id="registerPane" class="hidden">
+      <div class="auth-tabs">
+        <button data-authtab="login">Log In</button>
+        <button class="active" data-authtab="register">Register</button>
+      </div>
+      <form id="registerForm">
+        <div class="field"><label>Email</label><input type="email" id="regEmail" required autocomplete="username"></div>
+        <div class="field"><label>Password (min 6 characters)</label><input type="password" id="regPassword" minlength="6" required autocomplete="new-password"></div>
+        <div class="field"><label>Confirm Password</label><input type="password" id="regPassword2" minlength="6" required autocomplete="new-password"></div>
+        <button type="submit" class="btn btn-primary btn-block" id="registerBtn"><span>Create Account</span></button>
+      </form>
+    </div>
+
+    <!-- Forgot -->
+    <div id="forgotPane" class="hidden">
+      <h3 style="font-family:var(--font-display);color:var(--pine);margin:0 0 14px;font-size:17px;">Reset your password</h3>
+      <form id="forgotForm">
+        <div class="field"><label>Email</label><input type="email" id="forgotEmail" required></div>
+        <button type="submit" class="btn btn-primary btn-block" id="forgotBtn"><span>Send Reset Link</span></button>
+        <button type="button" class="auth-link" id="backToLogin">Back to log in</button>
+      </form>
+    </div>
+
+    <div class="auth-note">
+      <i class="fa-solid fa-circle-info"></i>
+      Firebase Authentication works best after this file is deployed to a real HTTPS host (for example GitHub Pages). Opening it directly from your file system may block sign-in.
+    </div>
+  </div>
+</div>
+
+<!-- ============================================================
+     APP SHELL
+============================================================ -->
+<div id="app">
+  <div class="overlay" id="sidebarOverlay"></div>
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-brand">
+      <div class="mark"><i class="fa-solid fa-dove"></i></div>
+      <button class="sidebar-close" id="sidebarCloseBtn" aria-label="Close navigation"><i class="fa-solid fa-xmark"></i></button>
+      <div><h1>Mughal Birds Farm</h1><span>Registry</span></div>
+    </div>
+    <div class="sync-pill" id="syncPill"><span class="sync-dot off" id="syncDot"></span><span id="syncLabel">Connecting…</span></div>
+    <nav class="nav" id="navList">
+      <div class="nav-item active" data-view="dashboard"><i class="fa-solid fa-gauge-high"></i>Dashboard</div>
+      <div class="nav-item" data-view="animals"><i class="fa-solid fa-paw"></i>Animals</div>
+      <div class="nav-group-label">Breeding</div>
+      <div class="nav-item" data-view="pairs"><i class="fa-solid fa-heart"></i>Pairs</div>
+      <div class="nav-item" data-view="colonies"><i class="fa-solid fa-house-chimney"></i>Colonies</div>
+      <div class="nav-item" data-view="boxes"><i class="fa-solid fa-box"></i>Boxes</div>
+      <div class="nav-item" data-view="offspring"><i class="fa-solid fa-egg"></i>Offspring</div>
+      <div class="nav-group-label">Records</div>
+      <div class="nav-item" data-view="species"><i class="fa-solid fa-feather"></i>Species</div>
+      <div class="nav-item" data-view="sales"><i class="fa-solid fa-sack-dollar"></i>Sales</div>
+      <div class="nav-item" data-view="statistics"><i class="fa-solid fa-chart-line"></i>Statistics</div>
+      <div class="nav-item" data-view="search"><i class="fa-solid fa-magnifying-glass"></i>Search</div>
+      <div class="nav-group-label">System</div>
+      <div class="nav-item" data-view="backup"><i class="fa-solid fa-cloud-arrow-down"></i>Backup</div>
+      <div class="nav-item" data-view="settings"><i class="fa-solid fa-gear"></i>Settings</div>
+    </nav>
+    <div class="sidebar-foot">
+      <div class="user-chip"><div class="av" id="userAv">?</div><div><div class="em" id="userEmail">—</div></div></div>
+      <button class="logout-btn" id="logoutBtn"><i class="fa-solid fa-right-from-bracket"></i>Log Out</button>
+    </div>
+  </aside>
+
+  <div class="main">
+    <div class="topbar">
+      <button class="hamburger" id="hamburgerBtn"><i class="fa-solid fa-bars"></i></button>
+      <h2 id="pageTitle">Dashboard</h2>
+      <div class="topbar-search"><i class="fa-solid fa-magnifying-glass"></i><input type="text" id="topSearch" placeholder="Search…"></div>
+    </div>
+    <div class="content feather-bg" id="content"><!-- view renders here --></div>
+  </div>
+</div>
+
+<div id="toastWrap"></div>
+<div class="modal-backdrop" id="modalBackdrop"><div class="modal" id="modalBox"></div></div>
+<!-- Startup fallback: never leave a blank screen if a module fails before authentication. -->
+<div id="bootError" style="display:none;min-height:100vh;align-items:center;justify-content:center;padding:24px;background:#F6F2E8;font-family:Inter,system-ui,sans-serif;">
+  <div style="max-width:460px;background:#FFFDF8;border:1px solid #E4DDC9;border-radius:18px;padding:28px;box-shadow:0 20px 48px -12px rgba(27,58,43,.28);text-align:center;">
+    <div style="font-size:32px;margin-bottom:10px;">🪶</div>
+    <h2 style="margin:0 0 8px;color:#1B3A2B;">Mughal Birds Farm</h2>
+    <p style="color:#5B655F;line-height:1.5;margin:0 0 16px;">The app could not finish loading. Please refresh the page. If the problem continues, check your Firebase configuration and browser connection.</p>
+    <button onclick="location.reload()" style="border:0;border-radius:10px;padding:11px 18px;background:#1B3A2B;color:#fff;font-weight:700;">Refresh</button>
+  </div>
+</div>
+
+
+<script type="module">
+window.addEventListener("error", (event)=>{
+  console.error("Mughal Birds Farm startup error:", event.error || event.message);
+  const boot = document.getElementById("bootError");
+  if(boot && !document.getElementById("app")?.classList.contains("active")){
+    boot.style.display = "flex";
+    const auth = document.getElementById("authScreen");
+    if(auth) auth.style.display = "none";
+  }
+});
+window.addEventListener("unhandledrejection", (event)=>{
+  console.error("Mughal Birds Farm startup rejection:", event.reason);
+});
+
+/* ============================================================
+   FIREBASE — CONFIGURATION
+   Replace the values below with your own Firebase project
+   credentials (Project settings → General → Your apps → SDK
+   config). This app requires:
+     • Authentication → Email/Password provider enabled
+     • Cloud Firestore → created in production or test mode
+     • (optional) Firebase Storage, if you enable photo uploads
+============================================================ */
+const firebaseConfig = {
+  apiKey: "AIzaSyCjtWQD4FFGiIY--P901afU-Sv-Hvn8s_0",
+  authDomain: "mughal-birds-farm.firebaseapp.com",
+  projectId: "mughal-birds-farm",
+  storageBucket: "mughal-birds-farm.firebasestorage.app",
+  messagingSenderId: "79908294518",
+  appId: "1:79908294518:web:a7466033f7f9da05543457",
+  measurementId: "G-HRLQSQN3N4"
+};
+
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.13.2/firebase-app.js";
+import {
+  getAuth, onAuthStateChanged, createUserWithEmailAndPassword,
+  signInWithEmailAndPassword, signOut, sendPasswordResetEmail
+} from "https://www.gstatic.com/firebasejs/10.13.2/firebase-auth.js";
+import {
+  getFirestore, collection, doc, onSnapshot, addDoc, setDoc, updateDoc, deleteDoc,
+  serverTimestamp, query, orderBy, writeBatch, getDocs
+} from "https://www.gstatic.com/firebasejs/10.13.2/firebase-firestore.js";
+
+const fbApp = initializeApp(firebaseConfig);
+const auth = getAuth(fbApp);
+// Use the standard Firestore client for maximum compatibility on GitHub Pages/mobile.
+// Offline persistence is intentionally left to the browser's normal caching layer so
+// an unsupported persistence mode cannot blank the entire application during startup.
+const db = getFirestore(fbApp);
+
+/* ============================================================
+   CONSTANTS
+============================================================ */
+const COLLECTIONS = ["species","animals","breedingPairs","colonies","breedingBoxes","offspring","sales","activity"];
+const PROGRAMME_VERSION = "2026-08-13-v2";
+const STARTER_SPECIES = [
+  { name:"Lovebird", common:"Lovebirds", category:"Bird", mutationTracking:true, sexTracking:true, breedingSupport:true, colonySupport:true, pairs:24 },
+  { name:"Hogoromo Budgie", common:"Hogoromo Budgies", category:"Bird", mutationTracking:true, sexTracking:true, breedingSupport:true, colonySupport:false, pairs:6 },
+  { name:"Diamond Pied Dove", common:"Diamond Pied Doves", category:"Bird", mutationTracking:true, sexTracking:true, breedingSupport:true, colonySupport:false, pairs:8 },
+  { name:"Alexandrine Parrot", common:"Alexandrines", category:"Bird", mutationTracking:true, sexTracking:true, breedingSupport:true, colonySupport:false, pairs:9 },
+  { name:"Indian Green Ringneck", common:"Indian Green Ringnecks", category:"Bird", mutationTracking:true, sexTracking:true, breedingSupport:true, colonySupport:false, pairs:4, defaultColor:"Green" },
+  { name:"Australian Crested Dove", common:"Australian Crested Doves", category:"Bird", mutationTracking:false, sexTracking:true, breedingSupport:true, colonySupport:false, pairs:1 },
+];
+
+const PROGRAMME_PAIRS = [
+  { species:"Lovebird", id:"LOV-P01", male:"parblue opaline pale fallow", female:"mosaic halfsider" },
+  { species:"Lovebird", id:"LOV-P02", male:"green dilute pale fallow", female:"green dilute pale fallow" },
+  { species:"Lovebird", id:"LOV-P03", male:"green euwing parblue opaline", female:"green euwing parblue opaline" },
+  { species:"Lovebird", id:"LOV-P04", male:"albino red-eyes", female:"albino red-eyes" },
+  { species:"Lovebird", id:"LOV-P05", male:"violet parblue Fischer", female:"lutino personata red eyes" },
+  { species:"Lovebird", id:"LOV-P06", male:"green parblue pied fischeri", female:"parblue pastelino" },
+  { species:"Lovebird", id:"LOV-P07", male:"albino black eye", female:"violet euwing opaline" },
+  { species:"Lovebird", id:"LOV-P08", male:"violet personata", female:"violet personata" },
+  { species:"Lovebird", id:"LOV-P09", male:"lutino personata red eye", female:"cremino" },
+  { species:"Lovebird", id:"LOV-P10", male:"lutino personata", female:"lutino personata" },
+  { species:"Lovebird", id:"LOV-P11", male:"lutino personata red eye", female:"lutino personata red eye" },
+  { species:"Lovebird", id:"LOV-P12", male:"parblue green fischeri", female:"albino black eye" },
+  { species:"Lovebird", id:"LOV-P13", male:"green parblue pied fischeri", female:"green parblue opaline" },
+  { species:"Lovebird", id:"LOV-P14", male:"albino red eyes", female:"albino red eyes" },
+  { species:"Lovebird", id:"LOV-P15", male:"violet pied opaline", female:"mauve pied opaline" },
+  { species:"Lovebird", id:"LOV-P16", male:"violet parblue opaline", female:"violet parblue opaline" },
+  { species:"Lovebird", id:"LOV-P17", male:"parblue pied personata", female:"cremino" },
+  { species:"Lovebird", id:"LOV-P18", male:"violet parblue fischeri", female:"violet parblue fischeri" },
+  { species:"Lovebird", id:"LOV-P19", male:"cremino", female:"cremino" },
+  { species:"Lovebird", id:"LOV-P20", male:"creamino", female:"creamino" },
+  { species:"Lovebird", id:"LOV-P21", male:"albino red eye", female:"violet pastel personata" },
+  { species:"Lovebird", id:"LOV-P22", male:"lutino personata red eyes", female:"violet personata" },
+  { species:"Lovebird", id:"LOV-P23", male:"violet sable", female:"violet pied" },
+  { species:"Lovebird", id:"LOV-P24", male:"decino", female:"parblue pastelino" },
+
+  { species:"Hogoromo Budgie", id:"HOG-P01", male:"violet yellow face", female:"cremino" },
+  { species:"Hogoromo Budgie", id:"HOG-P02", male:"cream lacewing", female:"grey tcb" },
+  { species:"Hogoromo Budgie", id:"HOG-P03", male:"blue cream pied", female:"grey tcb" },
+  { species:"Hogoromo Budgie", id:"HOG-P04", male:"grey tcb cream face", female:"blue pied" },
+  { species:"Hogoromo Budgie", id:"HOG-P05", male:"dark yellow lacewing", female:"light cream lacewing" },
+  { species:"Hogoromo Budgie", id:"HOG-P06", male:"yellow red eyes", female:"cream red eyes" },
+
+  { species:"Diamond Pied Dove", id:"DPD-P01", male:"common pied", female:"common pied" },
+  { species:"Diamond Pied Dove", id:"DPD-P02", male:"red pied", female:"red pied" },
+  { species:"Diamond Pied Dove", id:"DPD-P03", male:"blue pied", female:"opal pied" },
+  { species:"Diamond Pied Dove", id:"DPD-P04", male:"common pied", female:"common pied" },
+  { species:"Diamond Pied Dove", id:"DPD-P05", male:"red pied", female:"red pied" },
+  { species:"Diamond Pied Dove", id:"DPD-P06", male:"blue pied", female:"red pied" },
+  { species:"Diamond Pied Dove", id:"DPD-P07", male:"silver pied", female:"opal pied" },
+  { species:"Diamond Pied Dove", id:"DPD-P08", male:"", female:"" },
+
+  { species:"Alexandrine Parrot", id:"ALE-P01", male:"Green", female:"Green" },
+  { species:"Alexandrine Parrot", id:"ALE-P02", male:"Green", female:"Green" },
+  { species:"Alexandrine Parrot", id:"ALE-P03", male:"Green", female:"Green" },
+  { species:"Alexandrine Parrot", id:"ALE-P04", male:"green split blue", female:"Green" },
+  { species:"Alexandrine Parrot", id:"ALE-P05", male:"Green", female:"Green" },
+  { species:"Alexandrine Parrot", id:"ALE-P06", male:"Green", female:"Green" },
+  { species:"Alexandrine Parrot", id:"ALE-P07", male:"Green", female:"Green" },
+  { species:"Alexandrine Parrot", id:"ALE-P08", male:"Green", female:"Green" },
+  { species:"Alexandrine Parrot", id:"ALE-P09", male:"Green", female:"Green" },
+
+  { species:"Indian Green Ringneck", id:"IGR-P01", male:"Green", female:"Green" },
+  { species:"Indian Green Ringneck", id:"IGR-P02", male:"Green", female:"Green" },
+  { species:"Indian Green Ringneck", id:"IGR-P03", male:"Green", female:"Green" },
+  { species:"Indian Green Ringneck", id:"IGR-P04", male:"Green", female:"Green" },
+
+  { species:"Australian Crested Dove", id:"ACD-P01", male:"", female:"" },
+];
+
+const LOVE_COLONY_BIRDS = [
+  "parblue violet personata", "parblue turquoise personata", "parblue violet opaline", "parblue violet opaline",
+  "parblue turquoise opaline", "blue personata", "parblue mauve opaline", "cremino", "cremino", "cremino",
+  "cremino", "albino red eye", "albino red eye", "lutino personata red eye", "lutino personata red eye",
+  "lutino personata red eye", "lutino personata red eye", "violet parblue opaline"
+];
+
+
+/* ============================================================
+   STATE
+============================================================ */
+const state = {
+  uid: null,
+  email: null,
+  data: { species:[], animals:[], breedingPairs:[], colonies:[], breedingBoxes:[], offspring:[], sales:[], activity:[] },
+  loaded: { species:false, animals:false, breedingPairs:false, colonies:false, breedingBoxes:false, offspring:false, sales:false, activity:false },
+  view: localStorage.getItem("mbf.lastView") || "dashboard",
+  unsubs: [],
+  fromCache: false,
+};
+let detailTarget = null; // {type, id} for detail views
+
+/* ============================================================
+   UTILITIES
+============================================================ */
+const $ = (sel, el=document) => el.querySelector(sel);
+const $$ = (sel, el=document) => Array.from(el.querySelectorAll(sel));
+const uid4 = () => Math.random().toString(36).slice(2,6).toUpperCase();
+const genId = (prefix) => `${prefix}-${Date.now().toString(36).toUpperCase()}${uid4()}`;
+const esc = (s) => (s===undefined||s===null) ? "" : String(s).replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const fmtDate = (v) => { if(!v) return "—"; try{ const d = v.toDate ? v.toDate() : new Date(v); return d.toLocaleDateString(undefined,{year:"numeric",month:"short",day:"numeric"}); }catch(e){ return "—"; } };
+const fmtMoney = (n) => (n===undefined||n===null||n==="") ? "—" : `Rs ${Number(n).toLocaleString()}`;
+const byId = (arr,id) => arr.find(x=>x.id===id);
+const speciesName = (id) => { const s = byId(state.data.species,id); return s ? (s.common||s.name) : "—"; };
+
+function toast(msg, type="info"){
+  const wrap = $("#toastWrap");
+  const el = document.createElement("div");
+  el.className = `toast ${type}`;
+  const icon = type==="error" ? "fa-circle-exclamation" : type==="success" ? "fa-circle-check" : "fa-circle-info";
+  el.innerHTML = `<i class="fa-solid ${icon}"></i><span>${esc(msg)}</span>`;
+  wrap.appendChild(el);
+  setTimeout(()=>{ el.style.opacity="0"; el.style.transform="translateY(6px)"; el.style.transition="all .25s"; setTimeout(()=>el.remove(),250); }, 3400);
+}
+function friendlyAuthError(err){
+  const map = {
+    "auth/invalid-email":"That email address doesn't look right.",
+    "auth/user-not-found":"No account found with that email.",
+    "auth/wrong-password":"Incorrect password. Please try again.",
+    "auth/invalid-credential":"Incorrect email or password.",
+    "auth/email-already-in-use":"An account already exists with that email.",
+    "auth/weak-password":"Password should be at least 6 characters.",
+    "auth/too-many-requests":"Too many attempts. Please wait a moment and try again.",
+    "auth/network-request-failed":"Network error. Check your connection and try again."
+  };
+  return map[err?.code] || "Something went wrong. Please try again.";
+}
+
+/* ============================================================
+   AUTH SCREEN LOGIC
+============================================================ */
+function showAuthPane(pane){
+  ["loginPane","registerPane","forgotPane"].forEach(p=>$("#"+p).classList.toggle("hidden", p!==pane));
+  hideAuthMsgs();
+}
+function hideAuthMsgs(){ $("#authError").classList.add("hidden"); $("#authInfo").classList.add("hidden"); }
+function showAuthError(msg){ $("#authInfo").classList.add("hidden"); $("#authErrorText").textContent = msg; $("#authError").classList.remove("hidden"); }
+function showAuthInfo(msg){ $("#authError").classList.add("hidden"); $("#authInfo").textContent = msg; $("#authInfo").classList.remove("hidden"); }
+
+$$('[data-authtab]').forEach(btn=>{
+  btn.addEventListener("click", ()=>{
+    $$('[data-authtab]').forEach(b=>b.classList.remove("active"));
+    $$(`[data-authtab="${btn.dataset.authtab}"]`).forEach(b=>b.classList.add("active"));
+    showAuthPane(btn.dataset.authtab==="login" ? "loginPane" : "registerPane");
+  });
+});
+$("#showForgot").addEventListener("click", ()=>showAuthPane("forgotPane"));
+$("#backToLogin").addEventListener("click", ()=>showAuthPane("loginPane"));
+
+function setBtnLoading(btn, loading, label){
+  if(loading){ btn.disabled=true; btn.dataset.orig = btn.innerHTML; btn.innerHTML = `<span class="spinner"></span>`; }
+  else{ btn.disabled=false; btn.innerHTML = btn.dataset.orig || label; }
+}
+
+$("#loginForm").addEventListener("submit", async (e)=>{
+  e.preventDefault(); hideAuthMsgs();
+  const btn = $("#loginBtn");
+  setBtnLoading(btn,true);
+  try{
+    await signInWithEmailAndPassword(auth, $("#loginEmail").value.trim(), $("#loginPassword").value);
+  }catch(err){ showAuthError(friendlyAuthError(err)); }
+  finally{ setBtnLoading(btn,false,"Log In"); }
+});
+
+$("#registerForm").addEventListener("submit", async (e)=>{
+  e.preventDefault(); hideAuthMsgs();
+  if($("#regPassword").value !== $("#regPassword2").value){ showAuthError("Passwords do not match."); return; }
+  const btn = $("#registerBtn");
+  setBtnLoading(btn,true);
+  try{
+    await createUserWithEmailAndPassword(auth, $("#regEmail").value.trim(), $("#regPassword").value);
+  }catch(err){ showAuthError(friendlyAuthError(err)); }
+  finally{ setBtnLoading(btn,false,"Create Account"); }
+});
+
+$("#forgotForm").addEventListener("submit", async (e)=>{
+  e.preventDefault(); hideAuthMsgs();
+  const btn = $("#forgotBtn");
+  setBtnLoading(btn,true);
+  try{
+    await sendPasswordResetEmail(auth, $("#forgotEmail").value.trim());
+    showAuthInfo("Password reset email sent. Check your inbox.");
+  }catch(err){ showAuthError(friendlyAuthError(err)); }
+  finally{ setBtnLoading(btn,false,"Send Reset Link"); }
+});
+
+$("#logoutBtn").addEventListener("click", async ()=>{
+  try{ await signOut(auth); }catch(e){ toast("Unable to log out.","error"); }
+});
+
+/* ============================================================
+   AUTH STATE — GATE
+============================================================ */
+onAuthStateChanged(auth, (user)=>{
+  if(user){
+    state.uid = user.uid;
+    state.email = user.email;
+    $("#authScreen").style.display = "none";
+    $("#app").classList.add("active");
+    $("#userEmail").textContent = user.email;
+    $("#userAv").textContent = (user.email||"?").slice(0,1).toUpperCase();
+    attachListeners();
+    setView(state.view);
+  } else {
+    detachListeners();
+    state.uid = null;
+    Object.keys(state.data).forEach(k=>state.data[k]=[]);
+    Object.keys(state.loaded).forEach(k=>state.loaded[k]=false);
+    $("#app").classList.remove("active");
+    $("#authScreen").style.display = "flex";
+    showAuthPane("loginPane");
+    $$('[data-authtab]').forEach(b=>b.classList.toggle("active", b.dataset.authtab==="login"));
+    $("#loginForm").reset(); $("#registerForm").reset();
+  }
+});
+
+/* ============================================================
+   DATA SERVICE — single Firestore layer for every entity
+============================================================ */
+function colRef(name){ return collection(db, `users/${state.uid}/${name}`); }
+function docRef(name,id){ return doc(db, `users/${state.uid}/${name}/${id}`); }
+
+function attachListeners(){
+  detachListeners();
+  updateSyncPill("connecting");
+  COLLECTIONS.forEach(name=>{
+    const q = query(colRef(name));
+    const unsub = onSnapshot(q, (snap)=>{
+      state.data[name] = snap.docs.map(d=>({ id:d.id, ...d.data() }));
+      state.loaded[name] = true;
+      state.fromCache = snap.metadata.fromCache;
+      updateSyncPill(snap.metadata.fromCache ? "offline" : "online");
+      if(name==="species" && state.data.species.length===0){ /* first-run handled in render */ }
+      render();
+      maybeAutoSeedStarterProgramme();
+    }, (err)=>{
+      console.error("Firestore listen error", name, err);
+      updateSyncPill("error");
+      toast(`Unable to load ${name}. Check your connection.`, "error");
+    });
+    state.unsubs.push(unsub);
+  });
+  window.addEventListener("online", ()=>updateSyncPill(state.fromCache?"offline":"online"));
+  window.addEventListener("offline", ()=>updateSyncPill("offline"));
+}
+function detachListeners(){ state.unsubs.forEach(u=>u()); state.unsubs = []; }
+
+function updateSyncPill(status){
+  const dot = $("#syncDot"), label = $("#syncLabel");
+  if(!dot) return;
+  dot.className = "sync-dot";
+  if(status==="online" && navigator.onLine){ dot.classList.add("on"); label.textContent = "Connected"; }
+  else if(status==="connecting"){ dot.classList.add("off"); label.textContent = "Connecting…"; }
+  else if(status==="offline" || !navigator.onLine){ dot.classList.add("off"); label.textContent = "Offline · cached data"; }
+  else { dot.classList.add("err"); label.textContent = "Connection problem"; }
+}
+
+async function logActivity(message, icon="fa-circle-info"){
+  try{ await addDoc(colRef("activity"), { message, icon, createdAt: serverTimestamp() }); }
+  catch(e){ console.error("activity log failed", e); }
+}
+
+const DataService = {
+  async create(name, data){
+    try{
+      const ref = await addDoc(colRef(name), { ...data, createdAt: serverTimestamp(), updatedAt: serverTimestamp() });
+      return ref.id;
+    }catch(e){ console.error(e); toast(`Unable to save. Please check your connection.`,"error"); throw e; }
+  },
+  async createWithId(name, id, data){
+    try{ await setDoc(docRef(name,id), { ...data, createdAt: serverTimestamp(), updatedAt: serverTimestamp() }); return id; }
+    catch(e){ console.error(e); toast(`Unable to save. Please check your connection.`,"error"); throw e; }
+  },
+  async update(name, id, data){
+    try{ await updateDoc(docRef(name,id), { ...data, updatedAt: serverTimestamp() }); }
+    catch(e){ console.error(e); toast(`Unable to save changes. Please check your connection.`,"error"); throw e; }
+  },
+  async remove(name, id){
+    try{ await deleteDoc(docRef(name,id)); }
+    catch(e){ console.error(e); toast(`Unable to delete. Please check your connection.`,"error"); throw e; }
+  }
+};
+
+/* ============================================================
+   NAVIGATION
+============================================================ */
+const PAGE_TITLES = { dashboard:"Dashboard", animals:"Animals", pairs:"Breeding Pairs", colonies:"Colonies", boxes:"Breeding Boxes", offspring:"Offspring", species:"Species", sales:"Sales", statistics:"Statistics", search:"Search", backup:"Backup", settings:"Settings" };
+
+$$(".nav-item[data-view]").forEach(item=>{
+  item.addEventListener("click", ()=>{ detailTarget=null; setView(item.dataset.view); closeSidebarMobile(); });
+});
+function setView(view){
+  state.view = view;
+  localStorage.setItem("mbf.lastView", view);
+  $$(".nav-item[data-view]").forEach(n=>n.classList.toggle("active", n.dataset.view===view));
+  $("#pageTitle").textContent = PAGE_TITLES[view] || "Mughal Birds Farm";
+  render();
+}
+$("#hamburgerBtn").addEventListener("click", ()=>{ $("#sidebar").classList.add("open"); $("#sidebarOverlay").classList.add("show"); document.body.classList.add("sidebar-open"); });
+$("#sidebarCloseBtn").addEventListener("click", closeSidebarMobile);
+$("#sidebarOverlay").addEventListener("click", closeSidebarMobile);
+function closeSidebarMobile(){ $("#sidebar").classList.remove("open"); $("#sidebarOverlay").classList.remove("show"); document.body.classList.remove("sidebar-open"); }
+
+$("#topSearch").addEventListener("keydown", (e)=>{
+  if(e.key==="Enter"){ const term = e.target.value.trim(); if(term){ detailTarget=null; setView("search"); renderSearch(term); } }
+});
+
+/* ============================================================
+   MODAL HELPERS
+============================================================ */
+function openModal(title, bodyHtml, footButtons){
+  $("#modalBox").innerHTML = `
+    <div class="modal-head"><h3>${esc(title)}</h3><button class="modal-close" id="modalCloseBtn"><i class="fa-solid fa-xmark"></i></button></div>
+    <div class="modal-body">${bodyHtml}</div>
+    <div class="modal-foot">${footButtons}</div>`;
+  $("#modalBackdrop").classList.add("show");
+  $("#modalCloseBtn").addEventListener("click", closeModal);
+}
+function closeModal(){ $("#modalBackdrop").classList.remove("show"); $("#modalBox").innerHTML=""; }
+$("#modalBackdrop").addEventListener("click",(e)=>{ if(e.target.id==="modalBackdrop") closeModal(); });
+
+function selectOptions(list, current, labelFn, valFn=(x)=>x.id, allowEmpty="Select…"){
+  let html = `<option value="">${esc(allowEmpty)}</option>`;
+  list.forEach(x=>{ html += `<option value="${esc(valFn(x))}" ${valFn(x)===current?"selected":""}>${esc(labelFn(x))}</option>`; });
+  return html;
+}
+
+/* ============================================================
+   RENDER ROUTER
+============================================================ */
+function render(){
+  if(!state.uid) return;
+  const c = $("#content");
+  if(detailTarget){
+    if(detailTarget.type==="animal") return renderAnimalDetail(c, detailTarget.id);
+    if(detailTarget.type==="pair") return renderPairDetail(c, detailTarget.id);
+    if(detailTarget.type==="colony") return renderColonyDetail(c, detailTarget.id);
+    if(detailTarget.type==="box") return renderBoxDetail(c, detailTarget.id);
+    if(detailTarget.type==="offspring") return renderOffspringDetail(c, detailTarget.id);
+    if(detailTarget.type==="species") return renderSpeciesDetail(c, detailTarget.id);
+  }
+  const allLoaded = COLLECTIONS.every(n=>state.loaded[n]);
+  if(!allLoaded){ c.innerHTML = `<div style="text-align:center;padding:80px 0;color:var(--ink-soft);"><span class="spinner" style="border-top-color:var(--pine);border-color:rgba(27,58,43,.2);width:26px;height:26px;"></span><p style="margin-top:14px;font-weight:600;">Loading your farm records…</p></div>`; return; }
+
+  switch(state.view){
+    case "dashboard": return renderDashboard(c);
+    case "animals": return renderAnimals(c);
+    case "pairs": return renderPairs(c);
+    case "colonies": return renderColonies(c);
+    case "boxes": return renderBoxes(c);
+    case "offspring": return renderOffspring(c);
+    case "species": return renderSpecies(c);
+    case "sales": return renderSales(c);
+    case "statistics": return renderStatistics(c);
+    case "search": return renderSearch(c);
+    case "backup": return renderBackup(c);
+    case "settings": return renderSettings(c);
+    default: return renderDashboard(c);
+  }
+}
+
+/* ============================================================
+   FIRST-RUN / WELCOME
+============================================================ */
+function isFirstRun(){ return state.data.species.length===0 && state.data.animals.length===0 && state.data.breedingPairs.length===0; }
+
+function renderWelcome(c){
+  c.innerHTML = `
+  <div class="welcome-hero">
+    <div class="mark"><i class="fa-solid fa-dove"></i></div>
+    <h2>Welcome to Mughal Birds Farm</h2>
+    <p>Your farm database is ready. Your breeding programme can be pre-filled with your current pairs and individual birds, while mutation, cage and other specifications remain editable.</p>
+    <div style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap;">
+      <button class="btn btn-gold" id="seedBtn"><i class="fa-solid fa-seedling"></i> Sync My Breeding Programme</button>
+      <button class="btn btn-ghost" id="skipSeedBtn">Start Empty</button>
+    </div>
+  </div>
+  <div class="qa-grid">
+    <button class="qa-btn" data-qa="species"><i class="fa-solid fa-feather"></i><span>Add Species</span></button>
+    <button class="qa-btn" data-qa="animal"><i class="fa-solid fa-dove"></i><span>Add Bird</span></button>
+    <button class="qa-btn" data-qa="pair"><i class="fa-solid fa-heart"></i><span>Add Pair</span></button>
+  </div>`;
+  $("#seedBtn").addEventListener("click", seedStarterProgramme);
+  $("#skipSeedBtn").addEventListener("click", ()=>{ localStorage.setItem("mbf.skipSeed","1"); render(); });
+  bindQuickActions(c);
+}
+
+let starterSeedInProgress = false;
+
+async function seedStarterProgramme(){
+  if(starterSeedInProgress) return;
+  if(!state.uid){ toast("Please log in first.","error"); return; }
+  starterSeedInProgress = true;
+  const btn = $("#seedBtn");
+  if(btn) setBtnLoading(btn,true);
+
+  try{
+    const existing = {};
+    for(const name of ["species","animals","breedingPairs","colonies"]){
+      const snap = await getDocs(colRef(name));
+      existing[name] = snap.docs.map(d=>({id:d.id,...d.data()}));
+    }
+
+    // Remove only records created by the previous generic starter seed.
+    // Manually entered farm records are preserved.
+    let cleanup = writeBatch(db), cleanupCount = 0;
+    const queueDelete = (name,id)=>{ cleanup.delete(docRef(name,id)); cleanupCount++; };
+    existing.animals.filter(a => String(a.notes||"").startsWith("Starter programme record")).forEach(a=>queueDelete("animals",a.id));
+    existing.breedingPairs.filter(p => String(p.notes||"").startsWith("Starter pair")).forEach(p=>queueDelete("breedingPairs",p.id));
+    existing.colonies.filter(c => String(c.notes||"").includes("Starter programme") || String(c.name||"")==="Lovebird Colony").forEach(c=>queueDelete("colonies",c.id));
+    if(cleanupCount) await cleanup.commit();
+
+    // Upsert species by their stable names.
+    const speciesIds = {};
+    const speciesBatch = writeBatch(db);
+    let speciesWrites = 0;
+    for(const sp of STARTER_SPECIES){
+      const found = existing.species.find(s => s.name===sp.name || s.common===sp.common);
+      const id = found?.id || doc(colRef("species")).id;
+      speciesIds[sp.name] = id;
+      speciesBatch.set(docRef("species",id), {
+        name:sp.name, common:sp.common, category:sp.category, mutationTracking:sp.mutationTracking,
+        sexTracking:sp.sexTracking, breedingSupport:sp.breedingSupport, colonySupport:sp.colonySupport,
+        defaultColor:sp.defaultColor||"", notes:"", status:"Active", updatedAt:serverTimestamp(),
+        ...(found?.createdAt ? {} : {createdAt:serverTimestamp()})
+      }, {merge:true});
+      speciesWrites++;
+    }
+    if(speciesWrites) await speciesBatch.commit();
+
+    // Re-read species so all links are guaranteed to use the current Firestore IDs.
+    const speciesSnap = await getDocs(colRef("species"));
+    speciesSnap.forEach(d=>{ const x=d.data(); if(speciesIds[x.name]) speciesIds[x.name]=d.id; });
+
+    // Build exact pairs and their individual birds.
+    let pairBatch = writeBatch(db);
+    let writes = 0;
+    for(const p of PROGRAMME_PAIRS){
+      const speciesId = speciesIds[p.species];
+      const pairDocId = `programme-${p.id.toLowerCase()}`;
+      const maleDocId = `${pairDocId}-male`;
+      const femaleDocId = `${pairDocId}-female`;
+      pairBatch.set(docRef("animals",maleDocId), {
+        animalId:`${p.id}-M`, speciesId, sex:"Male", mutation:p.male||"", color:"", cage:"",
+        livingStatus:"Alive", breedingStatus:"Non-Breeding", soldStatus:"Not Sold", acquisitionDate:null,
+        purchasePrice:null, colonyId:null, notes:"User-provided breeding programme record.", category:"Bird",
+        updatedAt:serverTimestamp(), createdAt:serverTimestamp()
+      });
+      pairBatch.set(docRef("animals",femaleDocId), {
+        animalId:`${p.id}-F`, speciesId, sex:"Female", mutation:p.female||"", color:"", cage:"",
+        livingStatus:"Alive", breedingStatus:"Non-Breeding", soldStatus:"Not Sold", acquisitionDate:null,
+        purchasePrice:null, colonyId:null, notes:"User-provided breeding programme record.", category:"Bird",
+        updatedAt:serverTimestamp(), createdAt:serverTimestamp()
+      });
+      pairBatch.set(docRef("breedingPairs",pairDocId), {
+        pairId:p.id, speciesId, maleId:maleDocId, femaleId:femaleDocId,
+        maleMutation:p.male||"", femaleMutation:p.female||"", cage:"", breedingBoxId:null,
+        breedingStatus:"Non-Breeding", startDate:null, notes:"User-provided breeding programme record. No chicks recorded yet.",
+        status:"Active", updatedAt:serverTimestamp(), createdAt:serverTimestamp()
+      });
+      writes += 3;
+      if(writes >= 450){ await pairBatch.commit(); pairBatch = writeBatch(db); writes=0; }
+    }
+    if(writes) await pairBatch.commit();
+
+    // Create the one lovebird colony and its 18 individually tracked birds.
+    const colonyId = "programme-lovebird-colony-01";
+    const colonyBatch = writeBatch(db);
+    colonyBatch.set(docRef("colonies",colonyId), {
+      name:"Lovebird Colony 01", speciesId:speciesIds["Lovebird"], cage:"", notes:"User-provided colony: 18 lovebirds. Box assignments not entered yet.",
+      updatedAt:serverTimestamp(), createdAt:serverTimestamp()
+    });
+    LOVE_COLONY_BIRDS.forEach((mutation,i)=>{
+      const n=String(i+1).padStart(2,"0");
+      colonyBatch.set(docRef("animals",`programme-lov-colony-${n}`), {
+        animalId:`LOV-C${n}`, speciesId:speciesIds["Lovebird"], sex:"Unknown", mutation, color:"", cage:"",
+        livingStatus:"Alive", breedingStatus:"Non-Breeding", soldStatus:"Not Sold", acquisitionDate:null,
+        purchasePrice:null, colonyId, notes:"User-provided lovebird colony bird.", category:"Bird",
+        updatedAt:serverTimestamp(), createdAt:serverTimestamp()
+      });
+    });
+    await colonyBatch.commit();
+
+    await logActivity(`Breeding programme synced: 24 Lovebird pairs + 18 Lovebirds in colony, 6 Hogoromo pairs, 8 Diamond Pied Dove pairs, 9 Alexandrine pairs, 4 Indian Green Ringneck pairs, and 1 Australian Crested Dove pair.`,"fa-seedling");
+    localStorage.setItem("mbf.programmeVersion", PROGRAMME_VERSION);
+    localStorage.removeItem("mbf.autoSeedDone");
+    toast("Your exact breeding programme has been loaded into Firebase.","success");
+  }catch(e){
+    console.error(e);
+    toast("Unable to sync the breeding programme. Check your Firebase connection and try again.","error");
+  }finally{
+    starterSeedInProgress=false;
+    if(btn) setBtnLoading(btn,false,`<i class="fa-solid fa-seedling"></i> Sync My Breeding Programme`);
+  }
+}
+
+async function maybeAutoSeedStarterProgramme(){
+  if(starterSeedInProgress || !state.uid) return;
+  if(localStorage.getItem("mbf.programmeVersion") === PROGRAMME_VERSION) return;
+  const allLoaded = COLLECTIONS.every(name => state.loaded[name]);
+  if(!allLoaded) return;
+  await seedStarterProgramme();
+}
+
+/* ============================================================
+   DASHBOARD
+============================================================ */
+function renderDashboard(c){
+  if(isFirstRun() && localStorage.getItem("mbf.skipSeed")!=="1"){ return renderWelcome(c); }
+
+  const D = state.data;
+  const totalAnimals = D.animals.length;
+  const livingAnimals = D.animals.filter(a=>a.livingStatus!=="Dead").length;
+  const deadAnimals = D.animals.filter(a=>a.livingStatus==="Dead").length;
+  const soldAnimals = D.animals.filter(a=>a.soldStatus==="Sold").length + D.offspring.filter(o=>o.soldStatus==="Sold").length;
+  const pairs = D.breedingPairs.filter(p=>p.status!=="Archived").length;
+  const totalOffspring = D.offspring.length;
+  const separated = D.offspring.filter(o=>o.separationStatus==="Separated").length;
+  const withParents = D.offspring.filter(o=>o.separationStatus==="With Parents").length;
+
+  const stats = [
+    { icon:"fa-paw", val:totalAnimals, lbl:"Total Animals", view:"animals", bg:"var(--pine-100)", col:"var(--pine)" },
+    { icon:"fa-heart", val:pairs, lbl:"Breeding Pairs", view:"pairs", bg:"var(--brass-100)", col:"#8A6414" },
+    { icon:"fa-feather", val:D.species.length, lbl:"Species", view:"species", bg:"var(--slate-100)", col:"var(--slate)" },
+    { icon:"fa-check", val:livingAnimals, lbl:"Living Animals", view:"animals", bg:"var(--ok-100)", col:"var(--ok)" },
+    { icon:"fa-skull", val:deadAnimals, lbl:"Dead Animals", view:"animals", bg:"var(--clay-100)", col:"var(--clay)" },
+    { icon:"fa-sack-dollar", val:soldAnimals, lbl:"Sold Animals", view:"sales", bg:"var(--brass-100)", col:"#8A6414" },
+    { icon:"fa-egg", val:totalOffspring, lbl:"Total Offspring", view:"offspring", bg:"var(--pine-100)", col:"var(--pine)" },
+    { icon:"fa-arrow-right-arrow-left", val:separated, lbl:"Separated Offspring", view:"offspring", bg:"var(--slate-100)", col:"var(--slate)" },
+    { icon:"fa-house", val:withParents, lbl:"With Parents", view:"offspring", bg:"var(--ok-100)", col:"var(--ok)" },
+    { icon:"fa-house-chimney", val:D.colonies.length, lbl:"Colonies", view:"colonies", bg:"var(--pine-100)", col:"var(--pine)" },
+    { icon:"fa-box", val:D.breedingBoxes.length, lbl:"Breeding Boxes", view:"boxes", bg:"var(--brass-100)", col:"#8A6414" },
+  ];
+
+  c.innerHTML = `
+    <div class="stat-grid">${stats.map(s=>`
+      <div class="stat-card" data-goto="${s.view}">
+        <div class="ic" style="background:${s.bg};color:${s.col};"><i class="fa-solid ${s.icon}"></i></div>
+        <div class="val">${s.val}</div><div class="lbl">${s.lbl}</div>
+      </div>`).join("")}</div>
+
+    <div class="section-head"><h3>Quick Actions</h3></div>
+    <div class="qa-grid">
+      <button class="qa-btn" data-qa="animal"><i class="fa-solid fa-dove"></i><span>Add Bird</span></button>
+      <button class="qa-btn" data-qa="pair"><i class="fa-solid fa-heart"></i><span>Add Pair</span></button>
+      <button class="qa-btn" data-qa="offspring"><i class="fa-solid fa-egg"></i><span>Add Chick</span></button>
+      <button class="qa-btn" data-qa="colony"><i class="fa-solid fa-house-chimney"></i><span>Add Colony</span></button>
+      <button class="qa-btn" data-qa="box"><i class="fa-solid fa-box"></i><span>Add Box</span></button>
+      <button class="qa-btn" data-qa="species"><i class="fa-solid fa-feather"></i><span>Add Species</span></button>
+    </div>
+
+    <div class="wing-divider"></div>
+    <div class="section-head"><h3>Breeding Programme by Species</h3></div>
+    ${D.species.length ? `<div class="card-grid">${D.species.map(sp=>{
+      const pc = D.breedingPairs.filter(p=>p.speciesId===sp.id && p.status!=="Archived").length;
+      const oc = D.offspring.filter(o=>o.speciesId===sp.id).length;
+      return `<div class="entity-card" data-goto-species="${sp.id}">
+        <h4>${esc(sp.common||sp.name)}</h4>
+        <div class="meta"><span class="badge badge-pine">${pc} pair${pc===1?"":"s"}</span><span class="badge badge-slate">${oc} chick${oc===1?"":"s"}</span></div>
+      </div>`;
+    }).join("")}</div>` : `<div class="empty-state"><div class="emoji">🪶</div><h4>No species yet</h4><p>Add your first species to start organizing your breeding programme.</p><button class="btn btn-gold" data-qa="species">Add Species</button></div>`}
+
+    <div class="wing-divider"></div>
+    <div class="section-head"><h3>Recent Activity</h3></div>
+    ${renderActivityList()}
+  `;
+  bindDashboardEvents(c);
+  bindQuickActions(c);
+}
+function renderActivityList(){
+  const items = [...state.data.activity].sort((a,b)=>(b.createdAt?.seconds||0)-(a.createdAt?.seconds||0)).slice(0,8);
+  if(!items.length) return `<div class="empty-state"><div class="emoji">📋</div><h4>No recent activity</h4><p>Actions you take across the farm will appear here.</p></div>`;
+  return `<div class="table-wrap"><table class="dtable"><tbody>${items.map(a=>`
+    <tr><td style="width:34px;"><i class="fa-solid ${a.icon||'fa-circle-info'}" style="color:var(--brass-600);"></i></td>
+    <td>${esc(a.message)}</td><td style="text-align:right;color:var(--ink-soft);font-size:12px;">${fmtDate(a.createdAt)}</td></tr>`).join("")}</tbody></table></div>`;
+}
+function bindDashboardEvents(c){
+  $$("[data-goto]",c).forEach(el=>el.addEventListener("click",()=>setView(el.dataset.goto)));
+  $$("[data-goto-species]",c).forEach(el=>el.addEventListener("click",()=>{ detailTarget={type:"species",id:el.dataset.gotoSpecies}; render(); }));
+}
+function bindQuickActions(c){
+  $$("[data-qa]",c).forEach(el=>el.addEventListener("click",()=>{
+    const t = el.dataset.qa;
+    if(t==="animal") openAnimalForm();
+    if(t==="pair") openPairForm();
+    if(t==="offspring") openOffspringForm();
+    if(t==="colony") openColonyForm();
+    if(t==="box") openBoxForm();
+    if(t==="species") openSpeciesForm();
+  }));
+}
+
+/* ============================================================
+   SPECIES
+============================================================ */
+function renderSpecies(c){
+  const list = state.data.species;
+  c.innerHTML = `
+    <div class="section-head"><h3>Species (${list.length})</h3><button class="btn btn-gold btn-sm" id="addSpeciesBtn"><i class="fa-solid fa-plus"></i> Add Species</button></div>
+    ${list.length ? `<div class="card-grid">${list.map(sp=>{
+      const pc = state.data.breedingPairs.filter(p=>p.speciesId===sp.id).length;
+      const ac = state.data.animals.filter(a=>a.speciesId===sp.id).length;
+      return `<div class="entity-card" data-species-detail="${sp.id}">
+        <div class="top"><div><h4>${esc(sp.common||sp.name)}</h4><div class="mono">${esc(sp.category)}</div></div>${sp.mutationTracking?'<span class="badge badge-gold">Mutations</span>':''}</div>
+        <div class="meta">
+          <span class="badge badge-pine">${pc} pairs</span>
+          <span class="badge badge-slate">${ac} animals</span>
+          ${sp.colonySupport?'<span class="badge badge-green">Colony</span>':''}
+        </div>
+      </div>`;
+    }).join("")}</div>` : `<div class="empty-state"><div class="emoji">🪶</div><h4>No species recorded yet</h4><p>Species define what kinds of animals your farm tracks and which fields apply to them.</p><button class="btn btn-gold" id="emptyAddSpecies">Add First Species</button></div>`}
+  `;
+  $("#addSpeciesBtn")?.addEventListener("click", ()=>openSpeciesForm());
+  $("#emptyAddSpecies")?.addEventListener("click", ()=>openSpeciesForm());
+  $$("[data-species-detail]",c).forEach(el=>el.addEventListener("click",()=>{ detailTarget={type:"species",id:el.dataset.speciesDetail}; render(); }));
+}
+function openSpeciesForm(existing){
+  const isEdit = !!existing;
+  openModal(isEdit?"Edit Species":"Add Species", `
+    <div class="field"><label>Species Name *</label><input id="f_name" value="${esc(existing?.name||"")}" required></div>
+    <div class="field"><label>Common Name</label><input id="f_common" value="${esc(existing?.common||"")}"></div>
+    <div class="two-col">
+      <div class="field"><label>Category</label><select id="f_category">${["Bird","Mammal","Reptile","Other"].map(o=>`<option ${existing?.category===o?"selected":""}>${o}</option>`).join("")}</select></div>
+      <div class="field"><label>Default Color</label><input id="f_color" value="${esc(existing?.defaultColor||"")}"></div>
+    </div>
+    <div class="two-col">
+      <div class="field"><label><input type="checkbox" id="f_mut" ${existing?.mutationTracking?"checked":""}> Mutation Tracking</label></div>
+      <div class="field"><label><input type="checkbox" id="f_sex" ${existing?.sexTracking!==false?"checked":""}> Sex Tracking</label></div>
+    </div>
+    <div class="two-col">
+      <div class="field"><label><input type="checkbox" id="f_breed" ${existing?.breedingSupport?"checked":""}> Breeding Support</label></div>
+      <div class="field"><label><input type="checkbox" id="f_colony" ${existing?.colonySupport?"checked":""}> Colony Support</label></div>
+    </div>
+    <div class="field"><label>Notes</label><textarea id="f_notes">${esc(existing?.notes||"")}</textarea></div>
+  `, `<button class="btn btn-ghost" id="cancelBtn">Cancel</button><button class="btn btn-primary" id="saveBtn">${isEdit?"Save Changes":"Add Species"}</button>`);
+  $("#cancelBtn").addEventListener("click", closeModal);
+  $("#saveBtn").addEventListener("click", async ()=>{
+    const name = $("#f_name").value.trim();
+    if(!name){ toast("Species name is required.","error"); return; }
+    const payload = {
+      name, common: $("#f_common").value.trim()||name, category:$("#f_category").value,
+      defaultColor:$("#f_color").value.trim(), mutationTracking:$("#f_mut").checked, sexTracking:$("#f_sex").checked,
+      breedingSupport:$("#f_breed").checked, colonySupport:$("#f_colony").checked, notes:$("#f_notes").value.trim(),
+      status: existing?.status || "Active"
+    };
+    try{
+      if(isEdit){ await DataService.update("species", existing.id, payload); await logActivity(`Species updated: ${name}`,"fa-feather"); toast("Species updated.","success"); }
+      else{ await DataService.create("species", payload); await logActivity(`Species added: ${name}`,"fa-feather"); toast("Species added.","success"); }
+      closeModal();
+    }catch(e){}
+  });
+}
+function renderSpeciesDetail(c, id){
+  const sp = byId(state.data.species,id);
+  if(!sp){ detailTarget=null; return render(); }
+  const pairs = state.data.breedingPairs.filter(p=>p.speciesId===id);
+  const animals = state.data.animals.filter(a=>a.speciesId===id);
+  const offspring = state.data.offspring.filter(o=>o.speciesId===id);
+  const refCount = pairs.length + animals.length + offspring.length;
+  c.innerHTML = `
+    <button class="back-link" id="backBtn"><i class="fa-solid fa-arrow-left"></i> Back to Species</button>
+    <div class="profile-head">
+      <div class="profile-photo"><i class="fa-solid fa-feather"></i></div>
+      <div style="flex:1;"><h2 style="font-family:var(--font-display);margin:0 0 4px;color:var(--pine);">${esc(sp.common||sp.name)}</h2><div class="mono" style="font-size:12px;color:var(--ink-soft);">${esc(sp.category)}</div></div>
+      <div class="row-actions">
+        <button class="icon-btn" id="editSpBtn"><i class="fa-solid fa-pen"></i></button>
+        <button class="icon-btn danger" id="delSpBtn"><i class="fa-solid fa-trash"></i></button>
+      </div>
+    </div>
+    <div class="info-grid">
+      <div class="info-item"><div class="k">Pairs</div><div class="v">${pairs.length}</div></div>
+      <div class="info-item"><div class="k">Animals</div><div class="v">${animals.length}</div></div>
+      <div class="info-item"><div class="k">Offspring</div><div class="v">${offspring.length}</div></div>
+      <div class="info-item"><div class="k">Mutation Tracking</div><div class="v">${sp.mutationTracking?"Yes":"No"}</div></div>
+      <div class="info-item"><div class="k">Colony Support</div><div class="v">${sp.colonySupport?"Yes":"No"}</div></div>
+    </div>
+    ${sp.notes?`<p style="color:var(--ink-soft);font-size:13.5px;">${esc(sp.notes)}</p>`:""}
+    <div class="wing-divider"></div>
+    <div class="section-head"><h3>Breeding Pairs</h3></div>
+    ${pairs.length ? pairListTable(pairs) : `<div class="empty-state"><div class="emoji">💞</div><h4>No pairs yet</h4><p>No breeding pairs recorded for this species.</p></div>`}
+  `;
+  $("#backBtn").addEventListener("click", ()=>{ detailTarget=null; setView("species"); });
+  $("#editSpBtn").addEventListener("click", ()=>openSpeciesForm(sp));
+  $("#delSpBtn").addEventListener("click", async ()=>{
+    if(refCount>0){ if(!confirm(`This species has ${refCount} linked record(s). Deleting it will NOT delete those records, but they will reference a missing species. Continue?`)) return; }
+    else if(!confirm(`Delete species "${sp.common||sp.name}"?`)) return;
+    await DataService.remove("species", sp.id); await logActivity(`Species deleted: ${sp.common||sp.name}`,"fa-trash");
+    detailTarget=null; setView("species");
+  });
+  bindPairRowNav(c);
+}
+function pairListTable(pairs){
+  return `<div class="table-wrap"><table class="dtable"><thead><tr><th>Pair ID</th><th>Male</th><th>Female</th><th>Status</th><th>Offspring</th></tr></thead><tbody>
+    ${pairs.map(p=>{
+      const male = p.maleId ? byId(state.data.animals,p.maleId) : null;
+      const female = p.femaleId ? byId(state.data.animals,p.femaleId) : null;
+      const oc = state.data.offspring.filter(o=>o.pairId===p.id).length;
+      return `<tr data-pair-row="${p.id}">
+        <td data-label="Pair ID"><span class="mono">${esc(p.pairId||p.id)}</span></td>
+        <td data-label="Male">${male?esc(male.animalId||male.id):'<span class="badge badge-slate">No male registered</span>'}</td>
+        <td data-label="Female">${female?esc(female.animalId||female.id):'<span class="badge badge-slate">No female registered</span>'}</td>
+        <td data-label="Status">${statusBadge(p.breedingStatus)}</td>
+        <td data-label="Offspring">${oc}</td>
+      </tr>`;
+    }).join("")}</tbody></table></div>`;
+}
+function bindPairRowNav(c){ $$("[data-pair-row]",c).forEach(r=>r.addEventListener("click",()=>{ detailTarget={type:"pair",id:r.dataset.pairRow}; render(); })); }
+
+function statusBadge(status){
+  const map = { "Breeding":"badge-green","Non-Breeding":"badge-slate","Retired":"badge-slate","Alive":"badge-green","Dead":"badge-red","Sold":"badge-gold","Not Sold":"badge-slate","With Parents":"badge-green","Separated":"badge-gold","Transferred":"badge-slate","Active":"badge-green","Archived":"badge-slate","Empty":"badge-slate","Occupied":"badge-pine","Active Breeding":"badge-green","Finished":"badge-slate","Needs Cleaning":"badge-red" };
+  return `<span class="badge ${map[status]||'badge-slate'}">${esc(status||"—")}</span>`;
+}
+
+/* ============================================================
+   ANIMALS
+============================================================ */
+function renderAnimals(c){
+  const filters = state._animalFilters || {};
+  c.innerHTML = `
+    <div class="section-head"><h3>Animals (${state.data.animals.length})</h3><button class="btn btn-gold btn-sm" id="addAnimalBtn"><i class="fa-solid fa-plus"></i> Add Animal</button></div>
+    <div class="filter-bar">
+      <select id="filSpecies">${selectOptions(state.data.species, filters.species, s=>s.common||s.name, s=>s.id, "All Species")}</select>
+      <select id="filSex"><option value="">All Sexes</option>${["Male","Female","Unknown"].map(o=>`<option ${filters.sex===o?"selected":""}>${o}</option>`).join("")}</select>
+      <select id="filLiving"><option value="">All Living Status</option>${["Alive","Dead"].map(o=>`<option ${filters.living===o?"selected":""}>${o}</option>`).join("")}</select>
+      <select id="filSold"><option value="">All Sold Status</option>${["Not Sold","Sold"].map(o=>`<option ${filters.sold===o?"selected":""}>${o}</option>`).join("")}</select>
+      <input id="filText" placeholder="Search ID, mutation, cage…" value="${esc(filters.text||"")}">
+    </div>
+    <div id="animalListWrap"></div>
+  `;
+  $("#addAnimalBtn").addEventListener("click", ()=>openAnimalForm());
+  const applyFilters = ()=>{
+    state._animalFilters = { species:$("#filSpecies").value, sex:$("#filSex").value, living:$("#filLiving").value, sold:$("#filSold").value, text:$("#filText").value.trim().toLowerCase() };
+    renderAnimalList();
+  };
+  ["filSpecies","filSex","filLiving","filSold"].forEach(id=>$("#"+id).addEventListener("change",applyFilters));
+  $("#filText").addEventListener("input",applyFilters);
+  renderAnimalList();
+}
+function renderAnimalList(){
+  const wrap = $("#animalListWrap"); if(!wrap) return;
+  const f = state._animalFilters || {};
+  let list = state.data.animals;
+  if(f.species) list = list.filter(a=>a.speciesId===f.species);
+  if(f.sex) list = list.filter(a=>a.sex===f.sex);
+  if(f.living) list = list.filter(a=>a.livingStatus===f.living);
+  if(f.sold) list = list.filter(a=>a.soldStatus===f.sold);
+  if(f.text) list = list.filter(a=>[a.animalId,a.mutation,a.color,a.cage].filter(Boolean).join(" ").toLowerCase().includes(f.text));
+
+  if(!list.length){
+    wrap.innerHTML = `<div class="empty-state"><div class="emoji">🐦</div><h4>No animals found</h4><p>${state.data.animals.length? "No animals match your filters.":"Your universal animal database is empty. Add your first bird or animal to get started."}</p><button class="btn btn-gold" id="ea">Add Animal</button></div>`;
+    $("#ea")?.addEventListener("click",()=>openAnimalForm());
+    return;
+  }
+  wrap.innerHTML = `<div class="table-wrap"><table class="dtable"><thead><tr><th>ID</th><th>Species</th><th>Sex</th><th>Mutation</th><th>Living</th><th>Sold</th><th>Breeding</th><th>Cage</th><th></th></tr></thead><tbody>
+    ${list.map(a=>`<tr data-row="${a.id}">
+      <td data-label="ID"><span class="mono">${esc(a.animalId||a.id)}</span></td>
+      <td data-label="Species">${esc(speciesName(a.speciesId))}</td>
+      <td data-label="Sex">${esc(a.sex||"—")}</td>
+      <td data-label="Mutation">${esc(a.mutation||"—")}</td>
+      <td data-label="Living">${statusBadge(a.livingStatus)}</td>
+      <td data-label="Sold">${statusBadge(a.soldStatus)}</td>
+      <td data-label="Breeding">${statusBadge(a.breedingStatus)}</td>
+      <td data-label="Cage">${esc(a.cage||"—")}</td>
+      <td data-label=""><div class="row-actions"><button class="icon-btn danger" data-del="${a.id}"><i class="fa-solid fa-trash"></i></button></div></td>
+    </tr>`).join("")}</tbody></table></div>`;
+  $$("[data-row]",wrap).forEach(r=>r.addEventListener("click",(e)=>{ if(e.target.closest("[data-del]")) return; detailTarget={type:"animal",id:r.dataset.row}; render(); }));
+  $$("[data-del]",wrap).forEach(b=>b.addEventListener("click",async (e)=>{ e.stopPropagation(); const a=byId(state.data.animals,b.dataset.del); if(confirm(`Delete animal ${a.animalId||a.id}? This cannot be undone.`)){ await DataService.remove("animals",a.id); await logActivity(`Animal deleted: ${a.animalId||a.id}`,"fa-trash"); } }));
+}
+function openAnimalForm(existing, prefill){
+  const isEdit = !!existing;
+  const d = existing || prefill || {};
+  openModal(isEdit?"Edit Animal":"Add Animal", `
+    <div class="two-col">
+      <div class="field"><label>Animal ID</label><input id="f_aid" value="${esc(d.animalId||genId('AN'))}"></div>
+      <div class="field"><label>Species *</label><select id="f_sp">${selectOptions(state.data.species,d.speciesId,s=>s.common||s.name)}</select></div>
+    </div>
+    <div class="two-col">
+      <div class="field"><label>Sex</label><select id="f_sex">${["Unknown","Male","Female"].map(o=>`<option ${d.sex===o?"selected":""}>${o}</option>`).join("")}</select></div>
+      <div class="field"><label>Mutation</label><input id="f_mut" value="${esc(d.mutation||"")}" placeholder="e.g. Blue Opaline"></div>
+    </div>
+    <div class="two-col">
+      <div class="field"><label>Color</label><input id="f_color" value="${esc(d.color||"")}"></div>
+      <div class="field"><label>Cage / Enclosure</label><input id="f_cage" value="${esc(d.cage||"")}"></div>
+    </div>
+    <div class="two-col">
+      <div class="field"><label>Living Status</label><select id="f_living">${["Alive","Dead"].map(o=>`<option ${(d.livingStatus||"Alive")===o?"selected":""}>${o}</option>`).join("")}</select></div>
+      <div class="field"><label>Breeding Status</label><select id="f_breed">${["Non-Breeding","Breeding","Retired"].map(o=>`<option ${(d.breedingStatus||"Non-Breeding")===o?"selected":""}>${o}</option>`).join("")}</select></div>
+    </div>
+    <div class="two-col">
+      <div class="field"><label>Sold Status</label><select id="f_sold">${["Not Sold","Sold"].map(o=>`<option ${(d.soldStatus||"Not Sold")===o?"selected":""}>${o}</option>`).join("")}</select></div>
+      <div class="field"><label>Acquisition Date</label><input type="date" id="f_acqdate" value="${d.acquisitionDate?.toDate ? d.acquisitionDate.toDate().toISOString().slice(0,10) : (d.acquisitionDate||"")}"></div>
+    </div>
+    <div class="two-col">
+      <div class="field"><label>Purchase Price</label><input type="number" id="f_pprice" value="${d.purchasePrice??""}"></div>
+      <div class="field"><label>Colony</label><select id="f_colony">${selectOptions(state.data.colonies,d.colonyId,x=>x.name,x=>x.id,"None")}</select></div>
+    </div>
+    <div class="field"><label>Notes</label><textarea id="f_notes">${esc(d.notes||"")}</textarea></div>
+  `, `<button class="btn btn-ghost" id="cancelBtn">Cancel</button><button class="btn btn-primary" id="saveBtn">${isEdit?"Save Changes":"Add Animal"}</button>`);
+  $("#cancelBtn").addEventListener("click", closeModal);
+  $("#saveBtn").addEventListener("click", async ()=>{
+    const speciesId = $("#f_sp").value;
+    if(!speciesId){ toast("Please select a species.","error"); return; }
+    const payload = {
+      animalId: $("#f_aid").value.trim() || genId("AN"), speciesId, sex:$("#f_sex").value, mutation:$("#f_mut").value.trim(),
+      color:$("#f_color").value.trim(), cage:$("#f_cage").value.trim(), livingStatus:$("#f_living").value,
+      breedingStatus:$("#f_breed").value, soldStatus:$("#f_sold").value, acquisitionDate: $("#f_acqdate").value||null,
+      purchasePrice: $("#f_pprice").value?Number($("#f_pprice").value):null, colonyId: $("#f_colony").value||null,
+      notes: $("#f_notes").value.trim(), category: byId(state.data.species,speciesId)?.category || "Bird"
+    };
+    try{
+      if(isEdit){ await DataService.update("animals", existing.id, payload); await logActivity(`Animal updated: ${payload.animalId}`,"fa-pen"); toast("Animal updated.","success"); }
+      else{ const id = await DataService.create("animals", payload); await logActivity(`Bird added: ${payload.animalId}`,"fa-dove"); toast("Animal added.","success"); }
+      closeModal(); render();
+    }catch(e){}
+  });
+}
+function renderAnimalDetail(c, id){
+  const a = byId(state.data.animals,id);
+  if(!a){ detailTarget=null; return render(); }
+  const pairsAsMale = state.data.breedingPairs.filter(p=>p.maleId===id);
+  const pairsAsFemale = state.data.breedingPairs.filter(p=>p.femaleId===id);
+  const offspringAsParent = state.data.offspring.filter(o=>o.fatherId===id||o.motherId===id);
+  c.innerHTML = `
+    <button class="back-link" id="backBtn"><i class="fa-solid fa-arrow-left"></i> Back to Animals</button>
+    <div class="profile-head">
+      <div class="profile-photo"><i class="fa-solid ${a.category==='Mammal'?'fa-paw':a.category==='Reptile'?'fa-otter':'fa-dove'}"></i></div>
+      <div style="flex:1;"><h2 style="font-family:var(--font-display);margin:0 0 4px;color:var(--pine);">${esc(a.animalId||a.id)}</h2><div class="mono" style="font-size:12px;color:var(--ink-soft);">${esc(speciesName(a.speciesId))} · ${esc(a.sex||"Unknown")}</div></div>
+      <div class="row-actions">
+        <button class="icon-btn" id="editBtn"><i class="fa-solid fa-pen"></i></button>
+        <button class="icon-btn danger" id="delBtn"><i class="fa-solid fa-trash"></i></button>
+      </div>
+    </div>
+    <div class="info-grid">
+      <div class="info-item"><div class="k">Mutation</div><div class="v">${esc(a.mutation||"—")}</div></div>
+      <div class="info-item"><div class="k">Color</div><div class="v">${esc(a.color||"—")}</div></div>
+      <div class="info-item"><div class="k">Cage</div><div class="v">${esc(a.cage||"—")}</div></div>
+      <div class="info-item"><div class="k">Living Status</div><div class="v">${statusBadge(a.livingStatus)}</div></div>
+      <div class="info-item"><div class="k">Sold Status</div><div class="v">${statusBadge(a.soldStatus)}</div></div>
+      <div class="info-item"><div class="k">Breeding Status</div><div class="v">${statusBadge(a.breedingStatus)}</div></div>
+      <div class="info-item"><div class="k">Acquisition Date</div><div class="v">${fmtDate(a.acquisitionDate)}</div></div>
+      <div class="info-item"><div class="k">Purchase Price</div><div class="v">${fmtMoney(a.purchasePrice)}</div></div>
+    </div>
+    ${a.notes?`<p style="color:var(--ink-soft);font-size:13.5px;">${esc(a.notes)}</p>`:""}
+    <div class="wing-divider"></div>
+    <div class="section-head"><h3>Breeding Pairs</h3></div>
+    ${[...pairsAsMale,...pairsAsFemale].length ? pairListTable([...pairsAsMale,...pairsAsFemale]) : `<div class="empty-state"><div class="emoji">💞</div><h4>Not currently paired</h4><p>This animal is not linked to any breeding pair.</p></div>`}
+    <div class="wing-divider"></div>
+    <div class="section-head"><h3>Offspring as Parent (${offspringAsParent.length})</h3></div>
+    ${offspringAsParent.length ? offspringListTable(offspringAsParent) : `<div class="empty-state"><div class="emoji">🐣</div><h4>No offspring recorded</h4><p>No chicks are currently linked to this animal as a parent.</p></div>`}
+  `;
+  $("#backBtn").addEventListener("click", ()=>{ detailTarget=null; setView("animals"); });
+  $("#editBtn").addEventListener("click", ()=>openAnimalForm(a));
+  $("#delBtn").addEventListener("click", async ()=>{ if(confirm(`Delete animal ${a.animalId||a.id}? This cannot be undone.`)){ await DataService.remove("animals",a.id); await logActivity(`Animal deleted: ${a.animalId||a.id}`,"fa-trash"); detailTarget=null; setView("animals"); } });
+  bindPairRowNav(c); bindOffspringRowNav(c);
+}
+
+/* ============================================================
+   BREEDING PAIRS
+============================================================ */
+function renderPairs(c){
+  const list = state.data.breedingPairs;
+  c.innerHTML = `
+    <div class="section-head"><h3>Breeding Pairs (${list.length})</h3><button class="btn btn-gold btn-sm" id="addPairBtn"><i class="fa-solid fa-plus"></i> Add Pair</button></div>
+    ${list.length ? pairListTable(list) : `<div class="empty-state"><div class="emoji">💞</div><h4>No breeding pairs recorded yet</h4><p>Pairs link two registered animals together for breeding tracking.</p><button class="btn btn-gold" id="ea">Add First Pair</button></div>`}
+  `;
+  $("#addPairBtn")?.addEventListener("click", ()=>openPairForm());
+  $("#ea")?.addEventListener("click", ()=>openPairForm());
+  bindPairRowNav(c);
+}
+function openPairForm(existing){
+  const isEdit = !!existing;
+  const d = existing || {};
+  const speciesAnimals = (spId, sex) => state.data.animals.filter(a=>a.speciesId===spId && (sex? a.sex===sex : true));
+  openModal(isEdit?"Edit Pair":"Add Breeding Pair", `
+    <div class="two-col">
+      <div class="field"><label>Pair ID</label><input id="f_pid" value="${esc(d.pairId||genId('PAIR'))}"></div>
+      <div class="field"><label>Species *</label><select id="f_sp">${selectOptions(state.data.species,d.speciesId,s=>s.common||s.name)}</select></div>
+    </div>
+    <div class="two-col">
+      <div class="field"><label>Male</label><select id="f_male">${selectOptions(speciesAnimals(d.speciesId), d.maleId, a=>a.animalId||a.id)}</select><div class="helper-text" id="maleHelp"></div></div>
+      <div class="field"><label>Female</label><select id="f_female">${selectOptions(speciesAnimals(d.speciesId), d.femaleId, a=>a.animalId||a.id)}</select><div class="helper-text" id="femaleHelp"></div></div>
+    </div>
+    <div class="two-col">
+      <div class="field"><label>Cage</label><input id="f_cage" value="${esc(d.cage||"")}"></div>
+      <div class="field"><label>Breeding Box</label><select id="f_box">${selectOptions(state.data.breedingBoxes,d.breedingBoxId,b=>b.boxNumber||b.id,b=>b.id,"None")}</select></div>
+    </div>
+    <div class="two-col">
+      <div class="field"><label>Breeding Status</label><select id="f_status">${["Non-Breeding","Breeding","Retired"].map(o=>`<option ${(d.breedingStatus||"Non-Breeding")===o?"selected":""}>${o}</option>`).join("")}</select></div>
+      <div class="field"><label>Start Date</label><input type="date" id="f_start" value="${d.startDate||""}"></div>
+    </div>
+    <div class="field"><label>Notes</label><textarea id="f_notes">${esc(d.notes||"")}</textarea></div>
+  `, `<button class="btn btn-ghost" id="cancelBtn">Cancel</button><button class="btn btn-primary" id="saveBtn">${isEdit?"Save Changes":"Add Pair"}</button>`);
+
+  const refreshAnimalOptions = ()=>{
+    const spId = $("#f_sp").value;
+    $("#f_male").innerHTML = selectOptions(speciesAnimals(spId), d.maleId, a=>a.animalId||a.id, a=>a.id, "No male registered yet");
+    $("#f_female").innerHTML = selectOptions(speciesAnimals(spId), d.femaleId, a=>a.animalId||a.id, a=>a.id, "No female registered yet");
+  };
+  $("#f_sp").addEventListener("change", refreshAnimalOptions);
+  $("#cancelBtn").addEventListener("click", closeModal);
+  $("#saveBtn").addEventListener("click", async ()=>{
+    const speciesId = $("#f_sp").value;
+    if(!speciesId){ toast("Please select a species.","error"); return; }
+    const maleId = $("#f_male").value||null, femaleId = $("#f_female").value||null;
+    // Prevent duplicate active-pair assignment unless confirmed
+    if(maleId){
+      const conflict = state.data.breedingPairs.find(p=>p.maleId===maleId && p.id!==(existing?.id) && p.breedingStatus==="Breeding");
+      if(conflict && !confirm(`This male is already actively paired in ${conflict.pairId||conflict.id}. Assign anyway?`)) return;
+    }
+    if(femaleId){
+      const conflict = state.data.breedingPairs.find(p=>p.femaleId===femaleId && p.id!==(existing?.id) && p.breedingStatus==="Breeding");
+      if(conflict && !confirm(`This female is already actively paired in ${conflict.pairId||conflict.id}. Assign anyway?`)) return;
+    }
+    const payload = {
+      pairId: $("#f_pid").value.trim()||genId("PAIR"), speciesId, maleId, femaleId,
+      maleMutation: maleId ? (byId(state.data.animals,maleId)?.mutation||"") : "",
+      femaleMutation: femaleId ? (byId(state.data.animals,femaleId)?.mutation||"") : "",
+      cage: $("#f_cage").value.trim(), breedingBoxId: $("#f_box").value||null,
+      breedingStatus: $("#f_status").value, startDate: $("#f_start").value||null, notes: $("#f_notes").value.trim(),
+      status: d.status || "Active"
+    };
+    try{
+      if(isEdit){ await DataService.update("breedingPairs", existing.id, payload); await logActivity(`Pair updated: ${payload.pairId}`,"fa-pen"); toast("Pair updated.","success"); }
+      else{ await DataService.create("breedingPairs", payload); await logActivity(`Pair created: ${payload.pairId}`,"fa-heart"); toast("Pair added.","success"); }
+      closeModal(); render();
+    }catch(e){}
+  });
+}
+function renderPairDetail(c, id){
+  const p = byId(state.data.breedingPairs,id);
+  if(!p){ detailTarget=null; return render(); }
+  const male = p.maleId ? byId(state.data.animals,p.maleId) : null;
+  const female = p.femaleId ? byId(state.data.animals,p.femaleId) : null;
+  const offspring = state.data.offspring.filter(o=>o.pairId===id);
+  c.innerHTML = `
+    <button class="back-link" id="backBtn"><i class="fa-solid fa-arrow-left"></i> Back to Pairs</button>
+    <div class="profile-head">
+      <div class="profile-photo"><i class="fa-solid fa-heart"></i></div>
+      <div style="flex:1;"><h2 style="font-family:var(--font-display);margin:0 0 4px;color:var(--pine);">${esc(p.pairId||p.id)}</h2><div class="mono" style="font-size:12px;color:var(--ink-soft);">${esc(speciesName(p.speciesId))}</div></div>
+      <div class="row-actions">
+        <button class="icon-btn" id="addChickBtn" title="Add Chick"><i class="fa-solid fa-egg"></i></button>
+        <button class="icon-btn" id="editBtn"><i class="fa-solid fa-pen"></i></button>
+        <button class="icon-btn danger" id="delBtn"><i class="fa-solid fa-trash"></i></button>
+      </div>
+    </div>
+    <div class="info-grid">
+      <div class="info-item"><div class="k">Male</div><div class="v">${male? esc(male.animalId||male.id) : "No male registered yet"}</div></div>
+      <div class="info-item"><div class="k">Female</div><div class="v">${female? esc(female.animalId||female.id) : "No female registered yet"}</div></div>
+      <div class="info-item"><div class="k">Cage</div><div class="v">${esc(p.cage||"—")}</div></div>
+      <div class="info-item"><div class="k">Status</div><div class="v">${statusBadge(p.breedingStatus)}</div></div>
+      <div class="info-item"><div class="k">Start Date</div><div class="v">${fmtDate(p.startDate)}</div></div>
+      <div class="info-item"><div class="k">Offspring</div><div class="v">${offspring.length}</div></div>
+    </div>
+    ${p.notes?`<p style="color:var(--ink-soft);font-size:13.5px;">${esc(p.notes)}</p>`:""}
+    <div class="wing-divider"></div>
+    <div class="section-head"><h3>Offspring</h3><button class="btn btn-gold btn-sm" id="addChickBtn2"><i class="fa-solid fa-plus"></i> Add Chick</button></div>
+    ${offspring.length ? offspringListTable(offspring) : `<div class="empty-state"><div class="emoji">🐣</div><h4>No chicks recorded yet</h4><p>This pair's breeding programme currently has no offspring records.</p><button class="btn btn-gold" id="addChickBtn3">Add First Chick</button></div>`}
+  `;
+  $("#backBtn").addEventListener("click", ()=>{ detailTarget=null; setView("pairs"); });
+  $("#editBtn").addEventListener("click", ()=>openPairForm(p));
+  ["addChickBtn","addChickBtn2","addChickBtn3"].forEach(id=>$("#"+id)?.addEventListener("click",()=>openOffspringForm(null, p)));
+  $("#delBtn").addEventListener("click", async ()=>{ if(confirm(`Delete pair ${p.pairId||p.id}?`)){ await DataService.remove("breedingPairs",p.id); await logActivity(`Pair deleted: ${p.pairId||p.id}`,"fa-trash"); detailTarget=null; setView("pairs"); } });
+  bindOffspringRowNav(c);
+}
+
+/* ============================================================
+   COLONIES
+============================================================ */
+function renderColonies(c){
+  const list = state.data.colonies;
+  c.innerHTML = `
+    <div class="section-head"><h3>Colonies (${list.length})</h3><button class="btn btn-gold btn-sm" id="addColonyBtn"><i class="fa-solid fa-plus"></i> Add Colony</button></div>
+    ${list.length ? `<div class="card-grid">${list.map(col=>{
+      const birds = state.data.animals.filter(a=>a.colonyId===col.id);
+      const males = birds.filter(b=>b.sex==="Male").length, females = birds.filter(b=>b.sex==="Female").length;
+      return `<div class="entity-card" data-colony-detail="${col.id}">
+        <h4>${esc(col.name)}</h4><div class="mono">${esc(speciesName(col.speciesId))}</div>
+        <div class="meta"><span class="badge badge-pine">${birds.length} birds</span><span class="badge badge-slate">${males}♂ / ${females}♀</span></div>
+      </div>`;
+    }).join("")}</div>` : `<div class="empty-state"><div class="emoji">🏡</div><h4>No colonies recorded yet</h4><p>Colonies group birds housed and bred together, ideal for lovebird flocks.</p><button class="btn btn-gold" id="ea">Add First Colony</button></div>`}
+  `;
+  $("#addColonyBtn")?.addEventListener("click", ()=>openColonyForm());
+  $("#ea")?.addEventListener("click", ()=>openColonyForm());
+  $$("[data-colony-detail]",c).forEach(el=>el.addEventListener("click",()=>{ detailTarget={type:"colony",id:el.dataset.colonyDetail}; render(); }));
+}
+function openColonyForm(existing){
+  const isEdit = !!existing; const d = existing||{};
+  openModal(isEdit?"Edit Colony":"Add Colony", `
+    <div class="two-col">
+      <div class="field"><label>Colony Name *</label><input id="f_name" value="${esc(d.name||"")}"></div>
+      <div class="field"><label>Species</label><select id="f_sp">${selectOptions(state.data.species,d.speciesId,s=>s.common||s.name)}</select></div>
+    </div>
+    <div class="field"><label>Cage / Aviary</label><input id="f_cage" value="${esc(d.cage||"")}"></div>
+    <div class="field"><label>Notes</label><textarea id="f_notes">${esc(d.notes||"")}</textarea></div>
+  `, `<button class="btn btn-ghost" id="cancelBtn">Cancel</button><button class="btn btn-primary" id="saveBtn">${isEdit?"Save Changes":"Add Colony"}</button>`);
+  $("#cancelBtn").addEventListener("click", closeModal);
+  $("#saveBtn").addEventListener("click", async ()=>{
+    const name = $("#f_name").value.trim();
+    if(!name){ toast("Colony name is required.","error"); return; }
+    const payload = { name, speciesId: $("#f_sp").value||null, cage:$("#f_cage").value.trim(), notes:$("#f_notes").value.trim() };
+    try{
+      if(isEdit){ await DataService.update("colonies", existing.id, payload); toast("Colony updated.","success"); await logActivity(`Colony updated: ${name}`,"fa-pen"); }
+      else{ await DataService.create("colonies", payload); toast("Colony added.","success"); await logActivity(`Colony created: ${name}`,"fa-house-chimney"); }
+      closeModal(); render();
+    }catch(e){}
+  });
+}
+function renderColonyDetail(c, id){
+  const col = byId(state.data.colonies,id);
+  if(!col){ detailTarget=null; return render(); }
+  const birds = state.data.animals.filter(a=>a.colonyId===id);
+  const boxes = state.data.breedingBoxes.filter(b=>b.colonyId===id);
+  const males = birds.filter(b=>b.sex==="Male").length, females = birds.filter(b=>b.sex==="Female").length;
+  const mutBreakdown = {};
+  birds.forEach(b=>{ const k = b.mutation||"Unspecified"; mutBreakdown[k]=(mutBreakdown[k]||0)+1; });
+  c.innerHTML = `
+    <button class="back-link" id="backBtn"><i class="fa-solid fa-arrow-left"></i> Back to Colonies</button>
+    <div class="profile-head">
+      <div class="profile-photo"><i class="fa-solid fa-house-chimney"></i></div>
+      <div style="flex:1;"><h2 style="font-family:var(--font-display);margin:0 0 4px;color:var(--pine);">${esc(col.name)}</h2><div class="mono" style="font-size:12px;color:var(--ink-soft);">${esc(speciesName(col.speciesId))}</div></div>
+      <div class="row-actions"><button class="icon-btn" id="editBtn"><i class="fa-solid fa-pen"></i></button><button class="icon-btn danger" id="delBtn"><i class="fa-solid fa-trash"></i></button></div>
+    </div>
+    <div class="info-grid">
+      <div class="info-item"><div class="k">Total Birds</div><div class="v">${birds.length}</div></div>
+      <div class="info-item"><div class="k">Males</div><div class="v">${males}</div></div>
+      <div class="info-item"><div class="k">Females</div><div class="v">${females}</div></div>
+      <div class="info-item"><div class="k">Boxes</div><div class="v">${boxes.length}</div></div>
+    </div>
+    <div class="wing-divider"></div>
+    <div class="section-head"><h3>Mutation / Color Breakdown</h3></div>
+    <div class="meta" style="display:flex;flex-wrap:wrap;gap:8px;">${Object.keys(mutBreakdown).length? Object.entries(mutBreakdown).map(([k,v])=>`<span class="badge badge-pine">${esc(k)}: ${v}</span>`).join("") : '<span class="badge badge-slate">No birds yet</span>'}</div>
+    <div class="wing-divider"></div>
+    <div class="section-head"><h3>Birds in Colony</h3><button class="btn btn-gold btn-sm" id="addBirdBtn">Add Bird to Colony</button></div>
+    ${birds.length ? `<div class="table-wrap"><table class="dtable"><thead><tr><th>ID</th><th>Sex</th><th>Mutation</th><th>Status</th></tr></thead><tbody>
+      ${birds.map(b=>`<tr data-row="${b.id}"><td data-label="ID"><span class="mono">${esc(b.animalId||b.id)}</span></td><td data-label="Sex">${esc(b.sex||"—")}</td><td data-label="Mutation">${esc(b.mutation||"—")}</td><td data-label="Status">${statusBadge(b.livingStatus)}</td></tr>`).join("")}
+    </tbody></table></div>` : `<div class="empty-state"><div class="emoji">🐦</div><h4>No birds in this colony</h4><p>Add existing animals to this colony.</p></div>`}
+    <div class="wing-divider"></div>
+    <div class="section-head"><h3>Breeding Boxes</h3><button class="btn btn-gold btn-sm" id="addBoxBtn">Add Box</button></div>
+    ${boxes.length ? boxListTable(boxes) : `<div class="empty-state"><div class="emoji">📦</div><h4>No breeding boxes yet</h4><p>Add unlimited breeding boxes to this colony.</p></div>`}
+  `;
+  $("#backBtn").addEventListener("click", ()=>{ detailTarget=null; setView("colonies"); });
+  $("#editBtn").addEventListener("click", ()=>openColonyForm(col));
+  $("#delBtn").addEventListener("click", async ()=>{ if(confirm(`Delete colony ${col.name}?`)){ await DataService.remove("colonies",col.id); await logActivity(`Colony deleted: ${col.name}`,"fa-trash"); detailTarget=null; setView("colonies"); } });
+  $("#addBoxBtn").addEventListener("click", ()=>openBoxForm(null, col.id));
+  $("#addBirdBtn").addEventListener("click", ()=>openAssignToColony(col));
+  bindBoxRowNav(c);
+  $$("[data-row]",c).forEach(r=>r.addEventListener("click",()=>{ detailTarget={type:"animal",id:r.dataset.row}; render(); }));
+}
+function openAssignToColony(col){
+  const candidates = state.data.animals.filter(a=>a.speciesId===col.speciesId && a.colonyId!==col.id);
+  openModal(`Add Bird to ${col.name}`, `
+    <div class="field"><label>Select Animal</label><select id="f_animal">${selectOptions(candidates,null,a=>a.animalId||a.id)}</select></div>
+    ${!candidates.length ? `<p class="helper-text">No unassigned animals of this species exist yet. Add a bird first.</p>` : ""}
+  `, `<button class="btn btn-ghost" id="cancelBtn">Cancel</button><button class="btn btn-primary" id="saveBtn">Add</button>`);
+  $("#cancelBtn").addEventListener("click", closeModal);
+  $("#saveBtn").addEventListener("click", async ()=>{
+    const aid = $("#f_animal").value; if(!aid){ toast("Please select an animal.","error"); return; }
+    await DataService.update("animals", aid, { colonyId: col.id });
+    await logActivity(`Bird added to colony: ${col.name}`,"fa-house-chimney");
+    closeModal(); render();
+  });
+}
+
+/* ============================================================
+   BREEDING BOXES
+============================================================ */
+function renderBoxes(c){
+  const list = state.data.breedingBoxes;
+  c.innerHTML = `
+    <div class="section-head"><h3>Breeding Boxes (${list.length})</h3><button class="btn btn-gold btn-sm" id="addBoxBtn"><i class="fa-solid fa-plus"></i> Add Box</button></div>
+    ${list.length ? boxListTable(list) : `<div class="empty-state"><div class="emoji">📦</div><h4>No breeding boxes recorded yet</h4><p>Boxes can belong to a breeding pair or a colony — add as many as you need.</p><button class="btn btn-gold" id="ea">Add First Box</button></div>`}
+  `;
+  $("#addBoxBtn")?.addEventListener("click", ()=>openBoxForm());
+  $("#ea")?.addEventListener("click", ()=>openBoxForm());
+  bindBoxRowNav(c);
+}
+function boxListTable(list){
+  return `<div class="table-wrap"><table class="dtable"><thead><tr><th>Box #</th><th>Species</th><th>Assigned</th><th>Status</th><th>Chicks</th></tr></thead><tbody>
+    ${list.map(b=>{
+      const cc = state.data.offspring.filter(o=>o.boxId===b.id).length;
+      const assigned = b.colonyId ? (byId(state.data.colonies,b.colonyId)?.name||"Colony") : b.pairId ? (byId(state.data.breedingPairs,b.pairId)?.pairId||"Pair") : "—";
+      return `<tr data-box-row="${b.id}">
+        <td data-label="Box #"><span class="mono">${esc(b.boxNumber||b.id)}</span></td>
+        <td data-label="Species">${esc(speciesName(b.speciesId))}</td>
+        <td data-label="Assigned">${esc(assigned)}</td>
+        <td data-label="Status">${statusBadge(b.status)}</td>
+        <td data-label="Chicks">${cc}</td>
+      </tr>`;
+    }).join("")}</tbody></table></div>`;
+}
+function bindBoxRowNav(c){ $$("[data-box-row]",c).forEach(r=>r.addEventListener("click",()=>{ detailTarget={type:"box",id:r.dataset.boxRow}; render(); })); }
+function openBoxForm(existing, colonyId){
+  const isEdit = !!existing; const d = existing||{ colonyId };
+  openModal(isEdit?"Edit Box":"Add Breeding Box", `
+    <div class="two-col">
+      <div class="field"><label>Box Number *</label><input id="f_num" value="${esc(d.boxNumber||"")}" placeholder="e.g. Box 12"></div>
+      <div class="field"><label>Species</label><select id="f_sp">${selectOptions(state.data.species,d.speciesId,s=>s.common||s.name)}</select></div>
+    </div>
+    <div class="two-col">
+      <div class="field"><label>Colony</label><select id="f_colony">${selectOptions(state.data.colonies,d.colonyId,x=>x.name,x=>x.id,"None")}</select></div>
+      <div class="field"><label>Pair</label><select id="f_pair">${selectOptions(state.data.breedingPairs,d.pairId,x=>x.pairId||x.id,x=>x.id,"None")}</select></div>
+    </div>
+    <div class="field"><label>Status</label><select id="f_status">${["Empty","Occupied","Active Breeding","Finished","Needs Cleaning"].map(o=>`<option ${(d.status||"Empty")===o?"selected":""}>${o}</option>`).join("")}</select></div>
+    <div class="field"><label>Notes</label><textarea id="f_notes">${esc(d.notes||"")}</textarea></div>
+  `, `<button class="btn btn-ghost" id="cancelBtn">Cancel</button><button class="btn btn-primary" id="saveBtn">${isEdit?"Save Changes":"Add Box"}</button>`);
+  $("#cancelBtn").addEventListener("click", closeModal);
+  $("#saveBtn").addEventListener("click", async ()=>{
+    const boxNumber = $("#f_num").value.trim();
+    if(!boxNumber){ toast("Box number is required.","error"); return; }
+    const payload = { boxNumber, speciesId:$("#f_sp").value||null, colonyId:$("#f_colony").value||null, pairId:$("#f_pair").value||null, status:$("#f_status").value, notes:$("#f_notes").value.trim() };
+    try{
+      if(isEdit){ await DataService.update("breedingBoxes", existing.id, payload); toast("Box updated.","success"); await logActivity(`Box updated: ${boxNumber}`,"fa-pen"); }
+      else{ await DataService.create("breedingBoxes", payload); toast("Box added.","success"); await logActivity(`Box created: ${boxNumber}`,"fa-box"); }
+      closeModal(); render();
+    }catch(e){}
+  });
+}
+function renderBoxDetail(c, id){
+  const b = byId(state.data.breedingBoxes,id);
+  if(!b){ detailTarget=null; return render(); }
+  const chicks = state.data.offspring.filter(o=>o.boxId===id);
+  c.innerHTML = `
+    <button class="back-link" id="backBtn"><i class="fa-solid fa-arrow-left"></i> Back to Boxes</button>
+    <div class="profile-head">
+      <div class="profile-photo"><i class="fa-solid fa-box"></i></div>
+      <div style="flex:1;"><h2 style="font-family:var(--font-display);margin:0 0 4px;color:var(--pine);">${esc(b.boxNumber||b.id)}</h2><div class="mono" style="font-size:12px;color:var(--ink-soft);">${esc(speciesName(b.speciesId))}</div></div>
+      <div class="row-actions"><button class="icon-btn" id="editBtn"><i class="fa-solid fa-pen"></i></button><button class="icon-btn danger" id="delBtn"><i class="fa-solid fa-trash"></i></button></div>
+    </div>
+    <div class="info-grid">
+      <div class="info-item"><div class="k">Status</div><div class="v">${statusBadge(b.status)}</div></div>
+      <div class="info-item"><div class="k">Chicks</div><div class="v">${chicks.length}</div></div>
+    </div>
+    <div class="wing-divider"></div>
+    <div class="section-head"><h3>Chicks from this Box</h3></div>
+    ${chicks.length ? offspringListTable(chicks) : `<div class="empty-state"><div class="emoji">🐣</div><h4>No chicks recorded for this box</h4><p>Offspring linked to this box will appear here.</p></div>`}
+  `;
+  $("#backBtn").addEventListener("click", ()=>{ detailTarget=null; setView("boxes"); });
+  $("#editBtn").addEventListener("click", ()=>openBoxForm(b));
+  $("#delBtn").addEventListener("click", async ()=>{ if(confirm(`Delete box ${b.boxNumber||b.id}?`)){ await DataService.remove("breedingBoxes",b.id); await logActivity(`Box deleted: ${b.boxNumber||b.id}`,"fa-trash"); detailTarget=null; setView("boxes"); } });
+  bindOffspringRowNav(c);
+}
+
+/* ============================================================
+   OFFSPRING
+============================================================ */
+function renderOffspring(c){
+  const list = state.data.offspring;
+  c.innerHTML = `
+    <div class="section-head"><h3>Offspring (${list.length})</h3><button class="btn btn-gold btn-sm" id="addBtn"><i class="fa-solid fa-plus"></i> Add Chick</button></div>
+    ${list.length ? offspringListTable(list) : `<div class="empty-state"><div class="emoji">🐣</div><h4>No chicks recorded yet</h4><p>Your breeding programme currently has no offspring records.</p><button class="btn btn-gold" id="ea">Add First Chick</button></div>`}
+  `;
+  $("#addBtn")?.addEventListener("click", ()=>openOffspringForm());
+  $("#ea")?.addEventListener("click", ()=>openOffspringForm());
+  bindOffspringRowNav(c);
+}
+function offspringListTable(list){
+  return `<div class="table-wrap"><table class="dtable"><thead><tr><th>Chick ID</th><th>Species</th><th>Sex</th><th>Hatch Date</th><th>Living</th><th>Sold</th><th>Separation</th></tr></thead><tbody>
+    ${list.map(o=>`<tr data-off-row="${o.id}">
+      <td data-label="Chick ID"><span class="mono">${esc(o.offspringId||o.id)}</span></td>
+      <td data-label="Species">${esc(speciesName(o.speciesId))}</td>
+      <td data-label="Sex">${esc(o.sex||"Unknown")}</td>
+      <td data-label="Hatch Date">${fmtDate(o.hatchDate)}</td>
+      <td data-label="Living">${statusBadge(o.livingStatus)}</td>
+      <td data-label="Sold">${statusBadge(o.soldStatus)}</td>
+      <td data-label="Separation">${statusBadge(o.separationStatus)}</td>
+    </tr>`).join("")}</tbody></table></div>`;
+}
+function bindOffspringRowNav(c){ $$("[data-off-row]",c).forEach(r=>r.addEventListener("click",()=>{ detailTarget={type:"offspring",id:r.dataset.offRow}; render(); })); }
+function openOffspringForm(existing, fromPair){
+  const isEdit = !!existing; const d = existing || {};
+  const pairId = d.pairId || fromPair?.id || "";
+  const pair = pairId ? byId(state.data.breedingPairs,pairId) : null;
+  openModal(isEdit?"Edit Chick":"Add Chick", `
+    <div class="two-col">
+      <div class="field"><label>Chick ID</label><input id="f_cid" value="${esc(d.offspringId||genId('CH'))}"></div>
+      <div class="field"><label>Parent Pair</label><select id="f_pair">${selectOptions(state.data.breedingPairs,pairId,p=>p.pairId||p.id,p=>p.id,"None")}</select></div>
+    </div>
+    <div class="helper-text" id="parentInfo" style="margin-bottom:12px;"></div>
+    <div class="two-col">
+      <div class="field"><label>Sex</label><select id="f_sex">${["Unknown","Male","Female"].map(o=>`<option ${(d.sex||"Unknown")===o?"selected":""}>${o}</option>`).join("")}</select></div>
+      <div class="field"><label>Mutation</label><input id="f_mut" value="${esc(d.mutation||"")}"></div>
+    </div>
+    <div class="two-col">
+      <div class="field"><label>Color</label><input id="f_color" value="${esc(d.color||"")}"></div>
+      <div class="field"><label>Hatch / Birth Date</label><input type="date" id="f_hatch" value="${d.hatchDate||""}"></div>
+    </div>
+    <div class="two-col">
+      <div class="field"><label>Living Status</label><select id="f_living">${["Alive","Dead"].map(o=>`<option ${(d.livingStatus||"Alive")===o?"selected":""}>${o}</option>`).join("")}</select></div>
+      <div class="field"><label>Sold Status</label><select id="f_sold">${["Not Sold","Sold"].map(o=>`<option ${(d.soldStatus||"Not Sold")===o?"selected":""}>${o}</option>`).join("")}</select></div>
+    </div>
+    <div class="two-col">
+      <div class="field"><label>Separation Status</label><select id="f_sep">${["With Parents","Separated","Transferred"].map(o=>`<option ${(d.separationStatus||"With Parents")===o?"selected":""}>${o}</option>`).join("")}</select></div>
+      <div class="field"><label>Current Cage</label><input id="f_cage" value="${esc(d.cage||"")}"></div>
+    </div>
+    <div class="field"><label>Notes</label><textarea id="f_notes">${esc(d.notes||"")}</textarea></div>
+  `, `<button class="btn btn-ghost" id="cancelBtn">Cancel</button><button class="btn btn-primary" id="saveBtn">${isEdit?"Save Changes":"Add Chick"}</button>`);
+
+  const updateParentInfo = ()=>{
+    const pid = $("#f_pair").value; const p = pid ? byId(state.data.breedingPairs,pid) : null;
+    if(!p){ $("#parentInfo").textContent = "No pair selected — species, father, and mother will be left blank."; return; }
+    const male = p.maleId ? byId(state.data.animals,p.maleId) : null;
+    const female = p.femaleId ? byId(state.data.animals,p.femaleId) : null;
+    $("#parentInfo").textContent = `Species: ${speciesName(p.speciesId)} · Father: ${male?male.animalId:"—"} · Mother: ${female?female.animalId:"—"}`;
+  };
+  $("#f_pair").addEventListener("change", updateParentInfo); updateParentInfo();
+  $("#cancelBtn").addEventListener("click", closeModal);
+  $("#saveBtn").addEventListener("click", async ()=>{
+    const pid = $("#f_pair").value||null; const p = pid ? byId(state.data.breedingPairs,pid) : null;
+    const payload = {
+      offspringId: $("#f_cid").value.trim()||genId("CH"), pairId: pid, speciesId: p?.speciesId||null,
+      fatherId: p?.maleId||null, motherId: p?.femaleId||null,
+      sex:$("#f_sex").value, mutation:$("#f_mut").value.trim(), color:$("#f_color").value.trim(),
+      hatchDate: $("#f_hatch").value||null, livingStatus:$("#f_living").value, soldStatus:$("#f_sold").value,
+      separationStatus:$("#f_sep").value, cage:$("#f_cage").value.trim(), notes:$("#f_notes").value.trim(),
+      boxId: p?.breedingBoxId || d.boxId || null
+    };
+    try{
+      if(isEdit){ await DataService.update("offspring", existing.id, payload); await logActivity(`Chick updated: ${payload.offspringId}`,"fa-pen"); toast("Chick updated.","success"); }
+      else{ await DataService.create("offspring", payload); await logActivity(`Chick added: ${payload.offspringId}`,"fa-egg"); toast("Chick added.","success"); }
+      closeModal(); render();
+    }catch(e){}
+  });
+}
+function renderOffspringDetail(c, id){
+  const o = byId(state.data.offspring,id);
+  if(!o){ detailTarget=null; return render(); }
+  const father = o.fatherId ? byId(state.data.animals,o.fatherId) : null;
+  const mother = o.motherId ? byId(state.data.animals,o.motherId) : null;
+  const pair = o.pairId ? byId(state.data.breedingPairs,o.pairId) : null;
+  c.innerHTML = `
+    <button class="back-link" id="backBtn"><i class="fa-solid fa-arrow-left"></i> Back to Offspring</button>
+    <div class="profile-head">
+      <div class="profile-photo"><i class="fa-solid fa-egg"></i></div>
+      <div style="flex:1;"><h2 style="font-family:var(--font-display);margin:0 0 4px;color:var(--pine);">${esc(o.offspringId||o.id)}</h2><div class="mono" style="font-size:12px;color:var(--ink-soft);">${esc(speciesName(o.speciesId))}</div></div>
+      <div class="row-actions"><button class="icon-btn" id="editBtn"><i class="fa-solid fa-pen"></i></button><button class="icon-btn" id="sellBtn" title="Mark Sold"><i class="fa-solid fa-sack-dollar"></i></button><button class="icon-btn danger" id="delBtn"><i class="fa-solid fa-trash"></i></button></div>
+    </div>
+    <div class="info-grid">
+      <div class="info-item"><div class="k">Father</div><div class="v">${father?esc(father.animalId):"—"}</div></div>
+      <div class="info-item"><div class="k">Mother</div><div class="v">${mother?esc(mother.animalId):"—"}</div></div>
+      <div class="info-item"><div class="k">Parent Pair</div><div class="v">${pair?esc(pair.pairId||pair.id):"—"}</div></div>
+      <div class="info-item"><div class="k">Sex</div><div class="v">${esc(o.sex||"Unknown")}</div></div>
+      <div class="info-item"><div class="k">Mutation</div><div class="v">${esc(o.mutation||"—")}</div></div>
+      <div class="info-item"><div class="k">Hatch Date</div><div class="v">${fmtDate(o.hatchDate)}</div></div>
+      <div class="info-item"><div class="k">Living Status</div><div class="v">${statusBadge(o.livingStatus)}</div></div>
+      <div class="info-item"><div class="k">Sold Status</div><div class="v">${statusBadge(o.soldStatus)}</div></div>
+      <div class="info-item"><div class="k">Separation</div><div class="v">${statusBadge(o.separationStatus)}</div></div>
+    </div>
+    ${o.notes?`<p style="color:var(--ink-soft);font-size:13.5px;">${esc(o.notes)}</p>`:""}
+  `;
+  $("#backBtn").addEventListener("click", ()=>{ detailTarget=null; setView("offspring"); });
+  $("#editBtn").addEventListener("click", ()=>openOffspringForm(o));
+  $("#sellBtn").addEventListener("click", ()=>openSaleForm(null, {type:"offspring", record:o}));
+  $("#delBtn").addEventListener("click", async ()=>{ if(confirm(`Delete chick ${o.offspringId||o.id}?`)){ await DataService.remove("offspring",o.id); await logActivity(`Chick deleted: ${o.offspringId||o.id}`,"fa-trash"); detailTarget=null; setView("offspring"); } });
+}
+
+/* ============================================================
+   SALES
+============================================================ */
+function renderSales(c){
+  const list = state.data.sales;
+  c.innerHTML = `
+    <div class="section-head"><h3>Sales (${list.length})</h3><button class="btn btn-gold btn-sm" id="addBtn"><i class="fa-solid fa-plus"></i> Record Sale</button></div>
+    ${list.length ? `<div class="table-wrap"><table class="dtable"><thead><tr><th>Sale ID</th><th>Animal/Chick</th><th>Species</th><th>Buyer</th><th>Price</th><th>Date</th></tr></thead><tbody>
+      ${list.map(s=>`<tr><td data-label="Sale ID"><span class="mono">${esc(s.saleId||s.id)}</span></td><td data-label="Animal/Chick">${esc(s.recordLabel||s.recordId||"—")}</td><td data-label="Species">${esc(speciesName(s.speciesId))}</td><td data-label="Buyer">${esc(s.buyerName||"—")}</td><td data-label="Price">${fmtMoney(s.salePrice)}</td><td data-label="Date">${fmtDate(s.saleDate)}</td></tr>`).join("")}
+    </tbody></table></div>` : `<div class="empty-state"><div class="emoji">💰</div><h4>No sales recorded yet</h4><p>Mark an animal or chick as sold to automatically create a sale record.</p><button class="btn btn-gold" id="ea">Record First Sale</button></div>`}
+  `;
+  $("#addBtn")?.addEventListener("click", ()=>openSaleForm());
+  $("#ea")?.addEventListener("click", ()=>openSaleForm());
+}
+function openSaleForm(existing, presetTarget){
+  const animalsAndChicks = [
+    ...state.data.animals.filter(a=>a.soldStatus!=="Sold").map(a=>({...a, _kind:"animals", _label:a.animalId||a.id})),
+    ...state.data.offspring.filter(o=>o.soldStatus!=="Sold").map(o=>({...o, _kind:"offspring", _label:o.offspringId||o.id}))
+  ];
+  openModal("Record Sale", `
+    <div class="field"><label>Animal / Chick *</label><select id="f_target">${selectOptions(animalsAndChicks, presetTarget?.record?.id, x=>`${x._label} (${x._kind==="animals"?"Animal":"Chick"})`, x=>`${x._kind}:${x.id}`)}</select></div>
+    <div class="two-col">
+      <div class="field"><label>Buyer Name</label><input id="f_buyer"></div>
+      <div class="field"><label>Sale Price</label><input type="number" id="f_price"></div>
+    </div>
+    <div class="field"><label>Sale Date</label><input type="date" id="f_date" value="${new Date().toISOString().slice(0,10)}"></div>
+    <div class="field"><label>Notes</label><textarea id="f_notes"></textarea></div>
+  `, `<button class="btn btn-ghost" id="cancelBtn">Cancel</button><button class="btn btn-primary" id="saveBtn">Record Sale</button>`);
+  $("#cancelBtn").addEventListener("click", closeModal);
+  $("#saveBtn").addEventListener("click", async ()=>{
+    const targetVal = $("#f_target").value;
+    if(!targetVal){ toast("Please select an animal or chick.","error"); return; }
+    const [kind, id] = targetVal.split(":");
+    const record = kind==="animals" ? byId(state.data.animals,id) : byId(state.data.offspring,id);
+    if(!record){ toast("Record not found.","error"); return; }
+    const payload = {
+      saleId: genId("SALE"), recordType: kind, recordId: id, recordLabel: record.animalId||record.offspringId||id,
+      speciesId: record.speciesId||null, buyerName: $("#f_buyer").value.trim(), salePrice: $("#f_price").value?Number($("#f_price").value):null,
+      saleDate: $("#f_date").value||null, notes: $("#f_notes").value.trim()
+    };
+    try{
+      await DataService.create("sales", payload);
+      await DataService.update(kind, id, { soldStatus:"Sold", saleDate: payload.saleDate, salePrice: payload.salePrice });
+      await logActivity(`Marked sold: ${payload.recordLabel} to ${payload.buyerName||"buyer"}`,"fa-sack-dollar");
+      toast("Sale recorded.","success");
+      closeModal(); render();
+    }catch(e){}
+  });
+}
+
+/* ============================================================
+   STATISTICS
+============================================================ */
+function renderStatistics(c){
+  const D = state.data;
+  const living = D.animals.filter(a=>a.livingStatus!=="Dead").length;
+  const dead = D.animals.filter(a=>a.livingStatus==="Dead").length;
+  const soldA = D.animals.filter(a=>a.soldStatus==="Sold").length;
+  const offLiving = D.offspring.filter(o=>o.livingStatus!=="Dead").length;
+  const offDead = D.offspring.filter(o=>o.livingStatus==="Dead").length;
+  const offSold = D.offspring.filter(o=>o.soldStatus==="Sold").length;
+  const offSep = D.offspring.filter(o=>o.separationStatus==="Separated").length;
+  const offWith = D.offspring.filter(o=>o.separationStatus==="With Parents").length;
+
+  const bySpecies = D.species.map(sp=>({
+    name: sp.common||sp.name,
+    pairs: D.breedingPairs.filter(p=>p.speciesId===sp.id).length,
+    offspring: D.offspring.filter(o=>o.speciesId===sp.id).length,
+    animals: D.animals.filter(a=>a.speciesId===sp.id).length
+  }));
+  const pairPerf = D.breedingPairs.map(p=>({ pairId:p.pairId||p.id, species: speciesName(p.speciesId), count: D.offspring.filter(o=>o.pairId===p.id).length })).sort((a,b)=>b.count-a.count).slice(0,10);
+
+  c.innerHTML = `
+    <div class="stat-grid">
+      <div class="stat-card"><div class="ic" style="background:var(--pine-100);color:var(--pine);"><i class="fa-solid fa-paw"></i></div><div class="val">${D.animals.length}</div><div class="lbl">Total Animals</div></div>
+      <div class="stat-card"><div class="ic" style="background:var(--ok-100);color:var(--ok);"><i class="fa-solid fa-check"></i></div><div class="val">${living}</div><div class="lbl">Living</div></div>
+      <div class="stat-card"><div class="ic" style="background:var(--clay-100);color:var(--clay);"><i class="fa-solid fa-skull"></i></div><div class="val">${dead}</div><div class="lbl">Dead</div></div>
+      <div class="stat-card"><div class="ic" style="background:var(--brass-100);color:#8A6414;"><i class="fa-solid fa-sack-dollar"></i></div><div class="val">${soldA}</div><div class="lbl">Sold</div></div>
+    </div>
+    <div class="section-head"><h3>Offspring Breakdown</h3></div>
+    <div class="stat-grid">
+      <div class="stat-card"><div class="val">${D.offspring.length}</div><div class="lbl">Total Offspring</div></div>
+      <div class="stat-card"><div class="val">${offLiving}</div><div class="lbl">Living Offspring</div></div>
+      <div class="stat-card"><div class="val">${offDead}</div><div class="lbl">Dead Offspring</div></div>
+      <div class="stat-card"><div class="val">${offSold}</div><div class="lbl">Sold Offspring</div></div>
+      <div class="stat-card"><div class="val">${offSep}</div><div class="lbl">Separated</div></div>
+      <div class="stat-card"><div class="val">${offWith}</div><div class="lbl">With Parents</div></div>
+    </div>
+    <div class="wing-divider"></div>
+    <div class="section-head"><h3>Species Breakdown</h3></div>
+    ${bySpecies.length ? `<div class="table-wrap"><table class="dtable"><thead><tr><th>Species</th><th>Pairs</th><th>Animals</th><th>Offspring</th></tr></thead><tbody>
+      ${bySpecies.map(s=>`<tr><td data-label="Species">${esc(s.name)}</td><td data-label="Pairs">${s.pairs}</td><td data-label="Animals">${s.animals}</td><td data-label="Offspring">${s.offspring}</td></tr>`).join("")}
+    </tbody></table></div>` : `<div class="empty-state"><div class="emoji">📊</div><h4>No data yet</h4><p>Statistics will populate as you add species and records.</p></div>`}
+    <div class="wing-divider"></div>
+    <div class="section-head"><h3>Top Breeding Pairs</h3></div>
+    ${pairPerf.length ? `<div class="table-wrap"><table class="dtable"><thead><tr><th>Pair</th><th>Species</th><th>Offspring</th></tr></thead><tbody>
+      ${pairPerf.map(p=>`<tr><td data-label="Pair">${esc(p.pairId)}</td><td data-label="Species">${esc(p.species)}</td><td data-label="Offspring">${p.count}</td></tr>`).join("")}
+    </tbody></table></div>` : `<div class="empty-state"><div class="emoji">🏆</div><h4>No breeding performance yet</h4><p>Once chicks are linked to pairs, top performers will appear here.</p></div>`}
+  `;
+}
+
+/* ============================================================
+   SEARCH
+============================================================ */
+function renderSearch(c, presetTerm){
+  const term = presetTerm !== undefined ? presetTerm : (state._searchTerm||"");
+  state._searchTerm = term;
+  c.innerHTML = `
+    <div class="field" style="max-width:420px;"><label>Search across all records</label><input id="searchInput" placeholder="Animal ID, Pair ID, Chick ID, species, mutation, color, cage, box, colony…" value="${esc(term)}"></div>
+    <div id="searchResults"></div>
+  `;
+  $("#searchInput").addEventListener("input", (e)=>{ state._searchTerm = e.target.value; runSearch(e.target.value); });
+  $("#searchInput").focus();
+  runSearch(term);
+}
+function runSearch(term){
+  const t = term.trim().toLowerCase();
+  const results = $("#searchResults");
+  if(!results) return;
+  if(!t){ results.innerHTML = `<div class="empty-state"><div class="emoji">🔎</div><h4>Search your farm</h4><p>Start typing to search animals, pairs, chicks, colonies, boxes and species.</p></div>`; return; }
+  const matchers = [
+    { arr: state.data.animals, kind:"animal", label:x=>x.animalId||x.id, sub:x=>speciesName(x.speciesId), fields:x=>[x.animalId,x.mutation,x.color,x.cage] },
+    { arr: state.data.breedingPairs, kind:"pair", label:x=>x.pairId||x.id, sub:x=>speciesName(x.speciesId), fields:x=>[x.pairId,x.cage] },
+    { arr: state.data.offspring, kind:"offspring", label:x=>x.offspringId||x.id, sub:x=>speciesName(x.speciesId), fields:x=>[x.offspringId,x.mutation,x.color,x.cage] },
+    { arr: state.data.colonies, kind:"colony", label:x=>x.name, sub:x=>speciesName(x.speciesId), fields:x=>[x.name,x.cage] },
+    { arr: state.data.breedingBoxes, kind:"box", label:x=>x.boxNumber||x.id, sub:x=>speciesName(x.speciesId), fields:x=>[x.boxNumber] },
+    { arr: state.data.species, kind:"species", label:x=>x.common||x.name, sub:x=>x.category, fields:x=>[x.name,x.common] },
+  ];
+  let matches = [];
+  matchers.forEach(m=>{ m.arr.forEach(x=>{ if(m.fields(x).filter(Boolean).join(" ").toLowerCase().includes(t)){ matches.push({kind:m.kind, id:x.id, label:m.label(x), sub:m.sub(x)}); } }); });
+  if(!matches.length){ results.innerHTML = `<div class="empty-state"><div class="emoji">🔎</div><h4>No results</h4><p>Nothing matches "${esc(term)}".</p></div>`; return; }
+  results.innerHTML = `<div class="table-wrap"><table class="dtable"><tbody>${matches.map(m=>`
+    <tr data-search-row="${m.kind}:${m.id}"><td style="width:80px;"><span class="badge badge-pine">${m.kind}</span></td><td><strong>${esc(m.label)}</strong></td><td style="text-align:right;color:var(--ink-soft);">${esc(m.sub)}</td></tr>`).join("")}</tbody></table></div>`;
+  $$("[data-search-row]",results).forEach(r=>r.addEventListener("click",()=>{
+    const [kind,id] = r.dataset.searchRow.split(":");
+    detailTarget = { type:kind, id }; render();
+  }));
+}
+
+/* ============================================================
+   BACKUP (Export / Import)
+============================================================ */
+function renderBackup(c){
+  c.innerHTML = `
+    <div class="section-head"><h3>Export Database</h3></div>
+    <div class="entity-card" style="cursor:default;max-width:480px;">
+      <p style="color:var(--ink-soft);font-size:13.5px;margin:0 0 14px;">Download a complete backup of your farm data as JSON, including species, animals, pairs, colonies, boxes, offspring, sales and activity.</p>
+      <button class="btn btn-gold" id="exportBtn"><i class="fa-solid fa-download"></i> Export mughal-birds-farm-backup.json</button>
+    </div>
+    <div class="wing-divider"></div>
+    <div class="section-head"><h3>Import Database</h3></div>
+    <div class="entity-card" style="cursor:default;max-width:480px;">
+      <p style="color:var(--ink-soft);font-size:13.5px;margin:0 0 14px;">Import a previously exported backup file. You'll see a preview and record counts before anything is written to Firestore.</p>
+      <input type="file" id="importFile" accept="application/json" style="margin-bottom:12px;">
+      <div id="importPreview"></div>
+    </div>
+  `;
+  $("#exportBtn").addEventListener("click", ()=>{
+    const payload = { exportedAt: new Date().toISOString(), uid: state.uid, data: state.data };
+    const blob = new Blob([JSON.stringify(payload, null, 2)], { type:"application/json" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a"); a.href = url; a.download = "mughal-birds-farm-backup.json"; a.click();
+    URL.revokeObjectURL(url);
+    toast("Backup downloaded.","success");
+  });
+  $("#importFile").addEventListener("change", async (e)=>{
+    const file = e.target.files[0]; if(!file) return;
+    try{
+      const text = await file.text();
+      const parsed = JSON.parse(text);
+      if(!parsed.data || typeof parsed.data !== "object") throw new Error("Invalid backup structure.");
+      const counts = COLLECTIONS.map(name=>({ name, count: Array.isArray(parsed.data[name]) ? parsed.data[name].length : 0 }));
+      $("#importPreview").innerHTML = `
+        <div class="table-wrap" style="margin-bottom:12px;"><table class="dtable"><tbody>
+          ${counts.map(c=>`<tr><td data-label="Collection">${c.name}</td><td data-label="Records" style="text-align:right;">${c.count} record(s)</td></tr>`).join("")}
+        </tbody></table></div>
+        <button class="btn btn-primary" id="confirmImportBtn"><i class="fa-solid fa-cloud-arrow-up"></i> Write to Firestore</button>`;
+      $("#confirmImportBtn").addEventListener("click", async ()=>{
+        if(!confirm("This will add the imported records to your Firestore database. Continue?")) return;
+        const btn = $("#confirmImportBtn"); setBtnLoading(btn,true);
+        try{
+          for(const name of COLLECTIONS){
+            const arr = Array.isArray(parsed.data[name]) ? parsed.data[name] : [];
+            const batch = writeBatch(db);
+            arr.forEach(rec=>{
+              const { id, ...rest } = rec;
+              const ref = id ? doc(colRef(name), id) : doc(colRef(name));
+              batch.set(ref, { ...rest, updatedAt: serverTimestamp() }, { merge:true });
+            });
+            if(arr.length) await batch.commit();
+          }
+          await logActivity("Database imported from backup file.","fa-cloud-arrow-up");
+          toast("Import complete.","success");
+          $("#importPreview").innerHTML = "";
+          $("#importFile").value = "";
+        }catch(err){ console.error(err); toast("Import failed. Please check your connection.","error"); }
+        finally{ setBtnLoading(btn,false,`<i class="fa-solid fa-cloud-arrow-up"></i> Write to Firestore`); }
+      });
+    }catch(err){ toast("That file doesn't look like a valid backup.","error"); }
+  });
+}
+
+/* ============================================================
+   SETTINGS
+============================================================ */
+function renderSettings(c){
+  c.innerHTML = `
+    <div class="section-head"><h3>Account</h3></div>
+    <div class="entity-card" style="cursor:default;max-width:480px;">
+      <div class="info-item" style="margin-bottom:10px;"><div class="k">Signed in as</div><div class="v">${esc(state.email)}</div></div>
+      <button class="btn btn-ghost" id="resetPwBtn"><i class="fa-solid fa-key"></i> Send Password Reset Email</button>
+    </div>
+    <div class="wing-divider"></div>
+    <div class="section-head"><h3>Preferences</h3></div>
+    <div class="entity-card" style="cursor:default;max-width:480px;">
+      <p class="helper-text" style="margin-bottom:10px;">These preferences are stored only on this device (not synced), and never hold farm data.</p>
+      <div class="field"><label>Default landing page</label>
+        <select id="defaultViewSel">${Object.keys(PAGE_TITLES).map(v=>`<option value="${v}" ${state.view===v?"selected":""}>${PAGE_TITLES[v]}</option>`).join("")}</select>
+      </div>
+    </div>
+    <div class="wing-divider"></div>
+    <div class="section-head"><h3>Firestore Security Rules</h3></div>
+    <div class="entity-card" style="cursor:default;">
+      <p class="helper-text" style="margin-bottom:10px;">Paste these into Firebase Console → Firestore Database → Rules. They ensure every user can only read and write their own records.</p>
+      <pre style="background:var(--pine-950);color:var(--cream);padding:16px;border-radius:12px;font-size:12px;overflow-x:auto;font-family:var(--font-mono);line-height:1.6;">rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    match /users/{userId}/{document=**} {
+      allow read, write: if request.auth != null && request.auth.uid == userId;
+    }
+  }
+}</pre>
+    </div>
+  `;
+  $("#resetPwBtn").addEventListener("click", async ()=>{
+    try{ await sendPasswordResetEmail(auth, state.email); toast("Password reset email sent.","success"); }
+    catch(e){ toast("Unable to send reset email.","error"); }
+  });
+  $("#defaultViewSel").addEventListener("change",(e)=>{ localStorage.setItem("mbf.lastView", e.target.value); toast("Default page saved.","success"); });
+}
+
+/* ============================================================
+   INITIAL SYNC INDICATOR STATE
+============================================================ */
+updateSyncPill("connecting");
+</script>
+</body>
+</html>
